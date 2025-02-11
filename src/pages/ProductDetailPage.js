@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../css/ProductDetailPage.css";
 import macImage from "../assets/airpot2.png";
 
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
-const ProductDetails = ({ productId }) => {
+const ProductDetails = () => {
+  const { id } = useParams(); // ✅ URL에서 productId 가져오기
   const [product, setProduct] = useState(null);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -17,14 +19,14 @@ const ProductDetails = ({ productId }) => {
 
   // ✅ 상품 정보 및 좋아요 상태 가져오기
   useEffect(() => {
-    if (!productId) return;
+    if (!id) return;
 
     const fetchProductData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/${productId}`);
+        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
         setProduct(response.data.product);
 
-        const likeResponse = await axios.get(`${API_BASE_URL}/products/${productId}/likes?user_id=${userId}`);
+        const likeResponse = await axios.get(`${API_BASE_URL}/products/${id}/likes?user_id=${userId}`);
         setLiked(likeResponse.data.liked);
       } catch (error) {
         console.error("데이터를 가져오지 못했습니다.", error);
@@ -32,15 +34,15 @@ const ProductDetails = ({ productId }) => {
     };
 
     fetchProductData();
-  }, [productId]);
+  }, [id]);
 
   // ✅ 댓글 가져오기
   useEffect(() => {
-    if (!productId) return;
+    if (!id) return;
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/${productId}/comments`);
+        const response = await axios.get(`${API_BASE_URL}/products/${id}/comments`);
         setComments(response.data.comments);
       } catch (error) {
         console.error("❌ 댓글을 가져오지 못했습니다.", error);
@@ -48,7 +50,7 @@ const ProductDetails = ({ productId }) => {
     };
 
     fetchComments();
-  }, [productId]);
+  }, [id]);
 
   // ✅ 댓글 추가
   const handleCommentSubmit = async (e) => {
@@ -130,13 +132,14 @@ const ProductDetails = ({ productId }) => {
       console.error("❌ 좋아요 변경 실패", error);
     }
   };
+
   const categoryMap = {
     1: "전자기기",
     2: "의류",
     3: "가구",
     4: "생활용품",
     5: "스포츠",
-};
+  };
 
   if (!product) return <p>상품 정보를 불러오는 중...</p>;
 
@@ -152,11 +155,12 @@ const ProductDetails = ({ productId }) => {
           <p className="product-price">{product?.price?.toLocaleString() ?? "가격 정보 없음"}원</p>
           <p className="product-description">
             {product.content.split("\n").map((line, index) => (
-        <React.Fragment key={index}>
-            {line}
-            <br />
-        </React.Fragment>
-    ))}</p>
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </p>
           <div className="meta-info">
             <p>채팅 2 · 관심 {product.heart_count} · 조회 104</p>
           </div>

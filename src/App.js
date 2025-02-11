@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage"; // 추가
 import ProductDetailPage from "./pages/ProductDetailPage";
 
 const App = () => {
@@ -8,8 +9,11 @@ const App = () => {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/product_detail" element={<ProductDetailPage productId={1}/>} />
-        <Route path="/" element={<h1>홈페이지</h1>} />
+        {/* 홈 페이지 라우트 연결 */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* 상품 상세 페이지 라우트, ID를 URL을 통해 전달 */}
+        <Route path="/product/:id" element={<ProductDetailPage />} />
       </Routes>
     </Router>
   );

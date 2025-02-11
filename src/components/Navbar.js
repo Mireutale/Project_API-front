@@ -4,15 +4,6 @@ import logoImage from "../assets/logo.png";
 import "../css/Navbar.css";
 
 const Navbar = () => {
-  const [searchText, setSearchText] = useState(""); // 검색어 상태 관리
-  const navigate = useNavigate(); // 검색 결과 페이지로 이동
-
-  const handleSearch = () => {
-    if (searchText.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchText)}`);
-    }
-  };
-
   return (
     <nav className="navbar">
       <div className="logo">
@@ -32,14 +23,6 @@ const Navbar = () => {
 
       {/* ✅ 검색 입력창 & 버튼 */}
       <div className="navbar-right">
-        <input
-          type="text"
-          placeholder="검색어 입력"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="search-input"
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Enter 키로 검색 실행
-        />
         <button className="search-btn">로그인</button>
         <button className="logout-btn">회원가입</button>
       </div>
