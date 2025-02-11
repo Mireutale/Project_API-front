@@ -1,0 +1,219 @@
+
+
+
+/* 전체 레이아웃 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px 20px 20px;
+}
+
+/* 상품 이미지와 정보 나란히 배치 */
+.product-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between; /* 두 섹션 간격을 균등하게 분배 */
+  gap: 20px; /* 섹션 사이 간격 */
+  margin-bottom: 20px;
+  max-width: 1200px; /* 페이지 크기 제한 */
+  width: 100%; /* 항상 100% 너비 */
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+.image-section {
+  flex: 1;
+  max-width: 50%; /* 최대 너비를 설정하여 화면이 커져도 비율 유지 */
+}
+
+.product-image {
+  width: 100%;
+  max-width: 580px;
+  min-width: 400px;
+  border-radius: 8px;
+  object-fit: cover; /* 이미지 비율 유지 */
+}
+
+/* 상품 정보 스타일 */
+.info-section {
+  flex: 1;
+  width: 1000px;
+  padding: 10px; /* 패딩을 조금 늘림 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white; /* 조금 더 밝은 배경색 추가 */
+  font-size: 16px; /* 전체 폰트 크기를 키움 */
+  max-width: 580px;
+  min-width: 400px;
+}
+
+.product-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.product-category {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 20px;
+  color: #FF6F0F;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-description {
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.meta-info {
+  margin-bottom: 20px;
+  color: gray;
+}
+
+/* 버튼 스타일 */
+.button-section {
+  display: flex;
+  gap: 10px;
+}
+
+.like-btn {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #FF6F0F;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.like-btn.liked {
+  background-color: #ff6f61;
+  color: white;
+}
+
+.cta-btn {
+  padding: 10px 20px;
+  background-color: #FF6F0F;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 댓글 섹션 */
+.comment-section {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+#comment-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#comment-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.comment-item input {
+  width: 80%;  /* ✅ 가로 전체 차지 */
+  padding: 10px;  /* ✅ 내부 여백 증가 */
+  font-size: 16px;  /* ✅ 글씨 크기 증가 */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+#comment-form button {
+  padding: 10px 15px;
+  background-color: #FF6F0F;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+#comment-list li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* 댓글 영역 스타일 */
+.comment-section {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#comment-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#comment-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.comment-buttons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 모든 버튼 공통 스타일 */
+.comment-buttons button {
+  background-color: #ff7f50;  /* ✅ 기존 작성 버튼 색상과 동일 (코랄 색) */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* 버튼 마우스 오버 효과 */
+.comment-buttons button:hover {
+  background-color: #ff5722; /* ✅ 클릭 시 더 짙은 코랄색 */
+}
+
+/* 취소 버튼 */
+.comment-buttons .cancel-btn {
+  background-color: #777;
+}
+
+/* 취소 버튼 마우스 오버 효과 */
+.comment-buttons .cancel-btn:hover {
+  background-color: #555;
+}
