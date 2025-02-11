@@ -130,6 +130,13 @@ const ProductDetails = ({ productId }) => {
       console.error("❌ 좋아요 변경 실패", error);
     }
   };
+  const categoryMap = {
+    1: "전자기기",
+    2: "의류",
+    3: "가구",
+    4: "생활용품",
+    5: "스포츠",
+};
 
   if (!product) return <p>상품 정보를 불러오는 중...</p>;
 
@@ -141,15 +148,21 @@ const ProductDetails = ({ productId }) => {
         </div>
         <section className="info-section">
           <h1 className="product-title">{product.title}</h1>
-          <p className="product-category">{product.content}</p>
+          <p className="product-category">{categoryMap[product.category_id] || "기타"}</p>
           <p className="product-price">{product?.price?.toLocaleString() ?? "가격 정보 없음"}원</p>
-          <p className="product-description">{product.content}</p>
+          <p className="product-description">
+            {product.content.split("\n").map((line, index) => (
+        <React.Fragment key={index}>
+            {line}
+            <br />
+        </React.Fragment>
+    ))}</p>
           <div className="meta-info">
             <p>채팅 2 · 관심 {product.heart_count} · 조회 104</p>
           </div>
           <div className="button-section">
             <button className={`like-btn ${liked ? "liked" : ""}`} onClick={handleLikeToggle}>
-              {liked ? "💖 관심 등록 취소" : "🤍 관심 등록"}
+              {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
             <button className="cta-btn">채팅하기</button>
           </div>
