@@ -7,6 +7,13 @@ import { useNavigate } from "react-router-dom";
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
 const ProductDetails = ({ productId }) => {
+  const navigate = useNavigate();  // useNavigate 훅을 사용하여 페이지 이동
+
+  const goToChatRoom = () => {
+    const chatroomId = 1;  // 예시로 채팅방 ID 설정
+    navigate(`/chat/${chatroomId}`);  // 채팅방 페이지로 이동
+  };
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
