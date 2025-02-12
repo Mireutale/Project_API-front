@@ -3,11 +3,22 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../css/ProductDetailPage.css";
 import macImage from "../assets/airpot2.png";
-
+import { useNavigate } from "react-router-dom";
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
+<<<<<<< HEAD
+const ProductDetails = ({ productId }) => {
+  const navigate = useNavigate();  // useNavigate 훅을 사용하여 페이지 이동
+
+  const goToChatRoom = () => {
+    const chatroomId = 1;  // 예시로 채팅방 ID 설정
+    navigate(`/chat/${chatroomId}`);  // 채팅방 페이지로 이동
+  };
+  
+=======
 const ProductDetails = () => {
   const { id } = useParams(); // ✅ URL에서 productId 가져오기
+>>>>>>> dbc3b7b374f54e12e8349e761e907bb88f50b94f
   const [product, setProduct] = useState(null);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -168,7 +179,7 @@ const ProductDetails = () => {
             <button className={`like-btn ${liked ? "liked" : ""}`} onClick={handleLikeToggle}>
               {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
-            <button className="cta-btn">채팅하기</button>
+            <button className="cta-btn" onClick={goToChatRoom}>채팅하기</button>
           </div>
         </section>
       </div>
