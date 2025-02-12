@@ -12,7 +12,7 @@ const Navbar = () => {
 
       <ul className="nav-links">
         <li><Link to="/">홈</Link></li>
-        <li><Link to="/product_detail">중고거래</Link></li>
+        <li>중고거래</li>
         <li>부동산</li>
         <li>중고차</li>
         <li>알바</li>

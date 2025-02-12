@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 import axios from "axios";
 import "../css/HomePage.css"; // CSS 파일 연결
 
@@ -8,6 +8,7 @@ const API_BASE_URL = "http://localhost:8000/products"; // FastAPI 주소
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
+  const navigate = useNavigate(); // ✅ 페이지 이동 함수 추가
 
   useEffect(() => {
     fetchProducts();
@@ -45,6 +46,11 @@ const HomePage = () => {
     fetchProducts(searchTerm); // 검색어를 포함하여 API 요청
   };
 
+  // ✅ 게시물 작성 페이지로 이동하는 함수
+  const handleCreatePost = () => {
+    navigate("/create-post"); // `/create-post` 경로로 이동
+  };
+
   return (
     <div className="homepage">
       <h1 className="title">중고거래 인기매물</h1>
@@ -75,6 +81,11 @@ const HomePage = () => {
           </div>
         ))}
       </div>
+
+      {/* ✅ 오른쪽 하단에 동그란 + 버튼 추가 */}
+      <button className="floating-add-button" onClick={handleCreatePost}>
+        +
+      </button>
     </div>
   );
 };

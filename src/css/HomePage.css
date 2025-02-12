@@ -101,4 +101,31 @@
   .search-button:hover {
     background-color: #e64a19;
   }
-  
+  /* 오른쪽 하단 + 버튼 */
+/* 오른쪽 하단 + 버튼 (살짝 왼쪽 위로 이동) */
+.floating-add-button {
+  position: fixed;
+  bottom: 40px; /* 기존 20px → 80px으로 위쪽 이동 */
+  right: 40px;  /* 기존 20px → 80px으로 왼쪽 이동 */
+  width: 60px;
+  height: 60px;
+  background-color: #ff5722;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* 버튼을 마우스로 올리면 색상 변경 및 살짝 커짐 */
+.floating-add-button:hover {
+  background-color: #e64a19;
+  transform: scale(1.1);
+}
