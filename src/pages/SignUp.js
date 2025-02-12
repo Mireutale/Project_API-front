@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/styles.css';
+import { useAuth } from '../AuthContext'; // AuthContext import 추가
 
 const SignUp = () => {
     const [loginId, setLoginId] = useState('');
@@ -10,6 +11,7 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth(); // AuthContext 사용
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,11 +28,13 @@ const SignUp = () => {
                 email: email
             });
 
-            // 응답 데이터에서 토큰 추출
-            const token = response.data.access_token;
+            console.log('회원가입 성공:', response);
+
+            // 회원가입 성공 시 받은 사용자 정보로 로그인 처리
+            login(response.data); // 서버에서 받은 사용자 정보를 Context에 저장
 
             // 토큰 저장 및 홈페이지로 이동
-            localStorage.setItem('token', token);
+            localStorage.setItem('access_token', response.data.access_token); // ✅ 일관성 있게 'access_token' 사용
             navigate('/'); // 홈 페이지로 이동
         } catch (error) {
             console.error('회원가입 실패:', error.response?.data || error.message);

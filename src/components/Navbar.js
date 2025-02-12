@@ -39,7 +39,7 @@ const Navbar = () => {
               <img src={profileImage} alt="프로필" className="profile-image" />
               <div className="info-text">내 정보 보기</div>
             </div>
-            <span className="user-name">{user?.loginId} 님</span>
+            <span className="user-name">{user?.login_id} 님</span>
             <button onClick={logout} className="logout-btn">로그아웃</button>
           </div>
         ) : (

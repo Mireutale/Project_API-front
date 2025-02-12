@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/styles.css';
-import { useAuth } from '../AuthContext'; // AuthContext import
+import { useAuth } from '../AuthContext';
 
 const Login = () => {
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth(); // AuthContext 사용
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,20 +36,22 @@ const Login = () => {
                 }
             );
 
-            console.log('API 응답:', response);
+            console.log('API 응답:', response.data);
 
-            // 응답 데이터에서 토큰 추출
-            const token = response.data.access_token;
-            const profileImage = "../assets/carrot.png"; // carrot.png URL
+            // 서버에서 받은 사용자 정보를 그대로 사용
+            const userData = response.data;
 
-            // 로그인 성공 시 AuthContext의 login 함수 호출
-            login({ loginId, token, profileImage }); // 사용자 정보 전달
+            // AuthContext의 login 함수 호출
+            login(userData);
 
             // 토큰 저장 및 홈페이지로 이동
-            localStorage.setItem('access_token', token);  // ✅ 'token' → 'access_token'으로 변경
-            console.log("🛠️ 저장된 토큰 확인:", localStorage.getItem("access_token"));
+            localStorage.setItem('access_token', userData.access_token);
+            localStorage.setItem('user', JSON.stringify(userData));
 
-            navigate('/'); // 홈 페이지로 이동
+            console.log("🛠️ 저장된 토큰 확인:", localStorage.getItem("access_token"));
+            console.log("🛠️ 저장된 사용자 정보 확인:", localStorage.getItem("user"));
+
+            navigate('/mypage');
         } catch (error) {
             console.error('로그인 실패:', error);
             if (error.response) {
