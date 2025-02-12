@@ -74,3 +74,69 @@
   /* 버튼 너비 조정 */
   cursor: pointer;
 }
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  /* 이미지와 이름, 로그아웃 버튼 간격을 15px로 설정 */
+}
+
+.profile-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-image {
+  width: 30px;
+  /* 이미지 크기 */
+  height: 30px;
+  /* 이미지 크기 */
+  border-radius: 50%;
+  /* 원형으로 만들기 */
+  margin-left: 10px;
+  /* 이미지와 이름 사이 간격 */
+  border: 2px solid #ccc;
+  /* 회색 테두리 */
+  padding: 2px;
+  /* 테두리가 이미지에 붙지 않도록 패딩 추가 */
+  cursor: pointer;
+  /* 클릭 가능하게 변경 */
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+  /* 이미지와 이름 간격 */
+  color: #426281;
+  /* 파란색 계열, 너무 진하지 않으면서 눈에 띄는 색 */
+}
+
+.info-text {
+  position: absolute;
+  top: 35px;
+  /* 이미지 밑에 텍스트 위치 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #333;
+}
+
+.info-text {
+  display: none;
+}
+
+.profile-image-wrapper:hover .info-text {
+  display: block;
+}
+
+.logout-btn {
+  margin-left: 15px;
+  /* 로그아웃 버튼과 이름, 프로필 이미지 간격 */
+}
