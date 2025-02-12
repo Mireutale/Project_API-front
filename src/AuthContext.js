@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = (userData) => {
+        setIsLoggedIn(true);  // 이 부분 추가
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('access_token', userData.access_token);
