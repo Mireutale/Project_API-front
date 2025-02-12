@@ -9,11 +9,10 @@ import Login from "./pages/Login"; // Login 컴포넌트 import
 import SignUp from "./pages/SignUp"; // SignUp 컴포넌트 import
 import MyPage from "./pages/MyPage"; // MyPage 컴포넌트 import
 import { AuthProvider } from "./AuthContext"; // AuthContext 추가
-import ChatRoom from "./pages/ChatRoom";
-import CreatePostPage from "./pages/CreatePostPage";
 
 const App = () => {
   return (
+    <AuthProvider>
     <Router>
       <Navbar />
       <Routes>
@@ -30,6 +29,7 @@ const App = () => {
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 };
 

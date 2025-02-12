@@ -6,7 +6,7 @@ import "../css/ProductDetailPage.css";
 import { useNavigate } from "react-router-dom";
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
-const ProductDetails = ({ productId }) => {
+const ProductDetails = () => {
   const navigate = useNavigate();  // useNavigate 훅을 사용하여 페이지 이동
 
   const goToChatRoom = () => {
