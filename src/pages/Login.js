@@ -46,7 +46,9 @@ const Login = () => {
             login({ loginId, token, profileImage }); // 사용자 정보 전달
 
             // 토큰 저장 및 홈페이지로 이동
-            localStorage.setItem('token', token);
+            localStorage.setItem('access_token', token);  // ✅ 'token' → 'access_token'으로 변경
+            console.log("🛠️ 저장된 토큰 확인:", localStorage.getItem("access_token"));
+
             navigate('/'); // 홈 페이지로 이동
         } catch (error) {
             console.error('로그인 실패:', error);

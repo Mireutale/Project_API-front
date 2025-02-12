@@ -5,13 +5,16 @@ import "../css/CreatePostPage.css";
 const CreatePostPage = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
-  const [location, setLocation] = useState("");
   const [content, setContent] = useState("");
-  const [images, setImages] = useState([]);
-  const [categoryId, setCategoryId] = useState(1); // ✅ 카테고리 상태 추가
+  const [imageFiles, setImageFiles] = useState([]); // ✅ File 객체를 저장하는 배열 추가
+  const [categoryId, setCategoryId] = useState(1); 
   const maxImages = 5;
 
   const API_URL = "http://localhost:8000/products";  
+
+  // ✅ localStorage에서 토큰 가져오기
+  const accessToken = localStorage.getItem("access_token");  
+  console.log("🛠️ 현재 저장된 토큰:", accessToken);
 
   // ✅ 카테고리 옵션 목록
   const categories = [
@@ -22,18 +25,21 @@ const CreatePostPage = () => {
     { id: 5, name: "기타" },
   ];
 
+  // ✅ 이미지 업로드 핸들러 (File 객체 저장)
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    if (files.length + images.length > maxImages) {
+
+    if (files.length + imageFiles.length > maxImages) {
       alert(`이미지는 최대 ${maxImages}개까지 업로드할 수 있습니다.`);
       return;
     }
-    const imageUrls = files.map((file) => URL.createObjectURL(file));
-    setImages([...images, ...imageUrls]);
+
+    setImageFiles([...imageFiles, ...files]); // ✅ File 객체 저장
   };
 
+  // ✅ 이미지 삭제 핸들러
   const handleRemoveImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+    setImageFiles(imageFiles.filter((_, i) => i !== index));
   };
 
   const isFormValid = title && price && content;
@@ -45,15 +51,15 @@ const CreatePostPage = () => {
     const postData = {
       title,
       price: parseInt(price, 10),
-      location,
       content,
-      category_id: categoryId,  // ✅ 선택한 카테고리 반영
+      category_id: categoryId,  
     };
 
     try {
+      // ✅ 게시글 등록 요청 (토큰 포함)
       const response = await axios.post(API_URL, postData, {
         headers: {
-          Authorization: `Bearer YOUR_ACCESS_TOKEN`, 
+          Authorization: `Bearer ${accessToken}`,  
           "Content-Type": "application/json",
         },
       });
@@ -61,13 +67,14 @@ const CreatePostPage = () => {
       console.log("게시글 등록 성공:", response.data);
       alert("게시글이 등록되었습니다!");
 
-      if (images.length > 0) {
+      // ✅ 이미지 업로드 (FormData에 File 객체 추가)
+      if (imageFiles.length > 0) {
         const formData = new FormData();
-        images.forEach((image) => formData.append("image", image));
+        imageFiles.forEach((file) => formData.append("image", file));  // ✅ File 객체 추가
 
         await axios.post(`${API_URL}/${response.data.product.id}/image`, formData, {
           headers: {
-            Authorization: `Bearer YOUR_ACCESS_TOKEN`,
+            Authorization: `Bearer ${accessToken}`,  
             "Content-Type": "multipart/form-data",
           },
         });
@@ -88,11 +95,11 @@ const CreatePostPage = () => {
 
       <div className="image-upload-container">
         <label className="image-box">
-          {images.length < maxImages ? (
+          {imageFiles.length < maxImages ? (
             <>
               <input type="file" multiple accept="image/*" onChange={handleImageUpload} />
               <span className="image-icon">📷</span>
-              <p className="image-count">{images.length}/{maxImages}</p>
+              <p className="image-count">{imageFiles.length}/{maxImages}</p>
             </>
           ) : (
             <p>최대 {maxImages}장</p>
@@ -100,9 +107,9 @@ const CreatePostPage = () => {
         </label>
 
         <div className="image-preview-container">
-          {images.map((img, index) => (
+          {imageFiles.map((file, index) => (
             <div key={index} className="image-preview">
-              <img src={img} alt={`upload-${index}`} />
+              <img src={URL.createObjectURL(file)} alt={`upload-${index}`} />
               <button className="delete-button" onClick={() => handleRemoveImage(index)}>❌</button>
             </div>
           ))}
@@ -131,8 +138,6 @@ const CreatePostPage = () => {
             <option key={category.id} value={category.id}>{category.name}</option>
           ))}
         </select>
-
-        <input type="text" value={location} readOnly className="input-field readonly" />
 
         <textarea
           placeholder="게시글 내용을 작성해주세요"
