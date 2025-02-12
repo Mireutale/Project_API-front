@@ -29,9 +29,8 @@
 }
 
 .product-image {
-  width: 100%;
-  max-width: 580px;
-  min-width: 400px;
+  width: 560px;
+  height: 560px;
   border-radius: 8px;
   object-fit: cover; /* 이미지 비율 유지 */
 }
@@ -52,19 +51,21 @@
 .product-title {
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 15px;
 }
 
 .product-category {
   font-size: 14px;
   color: gray;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .product-price {
-  font-size: 20px;
-  color: #FF6F0F;
+  font-size: 25px;
+  margin-top: 25px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
+  color: black;
 }
 
 .product-description {
@@ -80,7 +81,7 @@
 /* 버튼 스타일 */
 .button-section {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
 .like-btn {
@@ -98,7 +99,8 @@
 }
 
 .cta-btn {
-  padding: 10px 20px;
+  width: 400px;
+  padding: 15px 25px;
   background-color: #FF6F0F;
   color: white;
   border: none;

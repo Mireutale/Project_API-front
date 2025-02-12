@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../css/ProductDetailPage.css";
 import macImage from "../assets/airpot2.png";
 import { useNavigate } from "react-router-dom";
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
+<<<<<<< HEAD
 const ProductDetails = ({ productId }) => {
   const navigate = useNavigate();  // useNavigate 훅을 사용하여 페이지 이동
 
@@ -13,6 +15,10 @@ const ProductDetails = ({ productId }) => {
     navigate(`/chat/${chatroomId}`);  // 채팅방 페이지로 이동
   };
   
+=======
+const ProductDetails = () => {
+  const { id } = useParams(); // ✅ URL에서 productId 가져오기
+>>>>>>> dbc3b7b374f54e12e8349e761e907bb88f50b94f
   const [product, setProduct] = useState(null);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -24,14 +30,14 @@ const ProductDetails = ({ productId }) => {
 
   // ✅ 상품 정보 및 좋아요 상태 가져오기
   useEffect(() => {
-    if (!productId) return;
+    if (!id) return;
 
     const fetchProductData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/${productId}`);
+        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
         setProduct(response.data.product);
 
-        const likeResponse = await axios.get(`${API_BASE_URL}/products/${productId}/likes?user_id=${userId}`);
+        const likeResponse = await axios.get(`${API_BASE_URL}/products/${id}/likes?user_id=${userId}`);
         setLiked(likeResponse.data.liked);
       } catch (error) {
         console.error("데이터를 가져오지 못했습니다.", error);
@@ -39,15 +45,15 @@ const ProductDetails = ({ productId }) => {
     };
 
     fetchProductData();
-  }, [productId]);
+  }, [id]);
 
   // ✅ 댓글 가져오기
   useEffect(() => {
-    if (!productId) return;
+    if (!id) return;
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/${productId}/comments`);
+        const response = await axios.get(`${API_BASE_URL}/products/${id}/comments`);
         setComments(response.data.comments);
       } catch (error) {
         console.error("❌ 댓글을 가져오지 못했습니다.", error);
@@ -55,7 +61,7 @@ const ProductDetails = ({ productId }) => {
     };
 
     fetchComments();
-  }, [productId]);
+  }, [id]);
 
   // ✅ 댓글 추가
   const handleCommentSubmit = async (e) => {
@@ -138,6 +144,14 @@ const ProductDetails = ({ productId }) => {
     }
   };
 
+  const categoryMap = {
+    1: "전자기기",
+    2: "의류",
+    3: "가구",
+    4: "생활용품",
+    5: "스포츠",
+  };
+
   if (!product) return <p>상품 정보를 불러오는 중...</p>;
 
   return (
@@ -148,15 +162,22 @@ const ProductDetails = ({ productId }) => {
         </div>
         <section className="info-section">
           <h1 className="product-title">{product.title}</h1>
-          <p className="product-category">{product.content}</p>
+          <p className="product-category">{categoryMap[product.category_id] || "기타"}</p>
           <p className="product-price">{product?.price?.toLocaleString() ?? "가격 정보 없음"}원</p>
-          <p className="product-description">{product.content}</p>
+          <p className="product-description">
+            {product.content.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </p>
           <div className="meta-info">
             <p>채팅 2 · 관심 {product.heart_count} · 조회 104</p>
           </div>
           <div className="button-section">
             <button className={`like-btn ${liked ? "liked" : ""}`} onClick={handleLikeToggle}>
-              {liked ? "💖 관심 등록 취소" : "🤍 관심 등록"}
+              {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
             <button className="cta-btn" onClick={goToChatRoom}>채팅하기</button>
           </div>

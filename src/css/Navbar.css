@@ -42,7 +42,6 @@
   }
   
   .navbar-right button {
-    width: 90px;
     height: 35px;
     padding: 5px 10px;
     border: none;
@@ -50,4 +49,22 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    width: 90px;
   }
+
+  .search-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .signin-btn {
+    background: none;
+    border: none;
+    font-size: 16px;  /* 기존 18px → 16px로 줄이기 */
+    padding: 4px 6px; /* 버튼 내부 여백 줄이기 */
+    width: 90px;  /* 버튼 너비 조정 */
+    cursor: pointer;
+  }
+  
