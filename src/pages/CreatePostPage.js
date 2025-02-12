@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";  // ✅ useNavigate 추가
 import axios from "axios";  
 import "../css/CreatePostPage.css"; 
 
@@ -9,7 +10,8 @@ const CreatePostPage = () => {
   const [imageFiles, setImageFiles] = useState([]); // ✅ File 객체를 저장하는 배열 추가
   const [categoryId, setCategoryId] = useState(1); 
   const maxImages = 5;
-
+  
+  const navigate = useNavigate();  // ✅ useNavigate 설정
   const API_URL = "http://localhost:8000/products";  
 
   // ✅ localStorage에서 토큰 가져오기
@@ -82,7 +84,8 @@ const CreatePostPage = () => {
         console.log("이미지 업로드 완료");
       }
 
-      window.location.href = "/";
+      // ✅ 홈 페이지로 이동
+      navigate("/");  // ✅ window.location.href 대신 SPA 방식 유지
     } catch (error) {
       console.error("게시글 등록 실패:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
