@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/styles.css';
-import { useAuth } from '../AuthContext'; // AuthContext import
+import { useAuth } from '../AuthContext';
 
 const Login = () => {
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth(); // AuthContext 사용
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
         try {
             const API_ENDPOINT = 'http://localhost:8000/users/token';
 
@@ -21,43 +22,29 @@ const Login = () => {
             formData.append('username', loginId);
             formData.append('password', password);
 
-            console.log('API 요청:', {
-                url: API_ENDPOINT,
-                data: formData
+            const response = await axios.post(API_ENDPOINT, formData, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
             });
 
-            const response = await axios.post(
-                API_ENDPOINT,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }
-            );
+            const userData = response.data;
 
-            console.log('API 응답:', response);
+            // AuthContext의 login 함수 호출
+            login(userData);
 
-            // 응답 데이터에서 토큰 추출
-            const token = response.data.access_token;
-            const profileImage = "../assets/carrot.png"; // carrot.png URL
+            // 로컬 스토리지에 저장
+            localStorage.setItem('access_token', userData.access_token);
+            localStorage.setItem('refresh_token', userData.refresh_token); // Refresh Token 저장
+            localStorage.setItem('user', JSON.stringify(userData));
 
-            // 로그인 성공 시 AuthContext의 login 함수 호출
-            login({ loginId, token, profileImage }); // 사용자 정보 전달
-
-            // 토큰 저장 및 홈페이지로 이동
-            localStorage.setItem('access_token', token);  // ✅ 'token' → 'access_token'으로 변경
-            console.log("🛠️ 저장된 토큰 확인:", localStorage.getItem("access_token"));
-
-            navigate('/'); // 홈 페이지로 이동
+            alert('로그인 성공!');
+            navigate('/mypage');
         } catch (error) {
             console.error('로그인 실패:', error);
             if (error.response) {
-                console.error('응답 데이터:', error.response.data);
-                console.error('응답 상태 코드:', error.response.status);
                 setError(`로그인 실패: ${error.response.status} - ${error.response.data.detail || error.message}`);
             } else if (error.request) {
-                console.error('응답을 받지 못함:', error.request);
                 setError('로그인 실패: 서버에서 응답이 없습니다.');
             } else {
                 setError(`로그인 실패: ${error.message}`);

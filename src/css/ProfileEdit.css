@@ -1,0 +1,129 @@
+/* ProfileEdit.css */
+
+/* 전체 컨테이너 스타일 */
+.profile-edit-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* 제목 스타일 */
+.profile-edit-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+/* 폼 요소 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 각 입력 필드와 레이블 컨테이너 */
+form div {
+    margin-bottom: 15px;
+}
+
+/* 레이블 스타일 */
+form label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* 입력 필드 스타일 */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* 입력 필드 포커스 시 스타일 */
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 버튼 스타일 */
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF6F0F;
+    /* 당근마켓 주황색 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 버튼 호버 효과 */
+button[type="submit"]:hover {
+    background-color: #FF6F0F;
+    /* 살짝 어두운 주황색 */
+}
+
+/* 버튼 활성화 상태 */
+button[type="submit"]:active {
+    background-color: #FF6F0F;
+    /* 더 어두운 주황색 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    .profile-edit-container {
+        padding: 15px;
+        margin-top: 30px;
+        box-shadow: none;
+        /* 모바일에서는 그림자 제거 */
+        background-color: #fff;
+        /* 배경색 조정 */
+        border-radius: 0;
+        /* 둥근 모서리 제거 */
+    }
+
+    form label {
+        font-size: 13px;
+        /* 폰트 크기 축소 */
+    }
+
+    form input,
+    button[type="submit"] {
+        font-size: 14px;
+        /* 입력 필드와 버튼 크기 조정 */
+        padding: 8px;
+        /* 여백 축소 */
+    }
+}
+
+
+/* ProfileEdit.css */
+
+/* 선택 항목의 괄호 스타일 */
+form label .optional {
+    color: #888;
+    /* 회색 */
+    font-style: italic;
+}
+
+/* 필수 항목의 괄호 스타일 */
+form label .required {
+    color: #e81b1b;
+    /* 빨간색 */
+    font-style: italic;
+}
