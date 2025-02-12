@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// Navbar.js
+import React from "react";
+import { Link } from "react-router-dom";
 import logoImage from "../assets/logo.png";
 import "../css/Navbar.css";
 
@@ -21,10 +22,14 @@ const Navbar = () => {
         <li>모임</li>
       </ul>
 
-      {/* ✅ 검색 입력창 & 버튼 */}
+      {/* 로그인 및 회원가입 버튼 */}
       <div className="navbar-right">
-        <button className="search-btn">로그인</button>
-        <button className="logout-btn">회원가입</button>
+        <Link to="/login">
+          <button className="search-btn">로그인</button>
+        </Link>
+        <Link to="/signup">
+          <button className="logout-btn">회원가입</button>
+        </Link>
       </div>
     </nav>
   );
