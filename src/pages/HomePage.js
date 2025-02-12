@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 import axios from "axios";
 import "../css/HomePage.css"; // CSS 파일 연결
 
-const API_BASE_URL = "http://localhost:8000/products"; // FastAPI 주소
+const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -17,7 +17,7 @@ const HomePage = () => {
   // ✅ 상품 목록 API 요청 (검색어 포함)
   const fetchProducts = async (query = "") => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/`, {
+      const response = await axios.get(`${API_BASE_URL}/products`, {
         params: { q: query }, // 쿼리 파라미터 추가
       });
 
@@ -26,8 +26,8 @@ const HomePage = () => {
         title: item.product.title,
         price: item.product.price.toLocaleString() + "원",
         image: item.productImages.length > 0 
-          ? `${API_BASE_URL}/images/${item.productImages[0].image_URI}` 
-          : "/images/default.png", // 기본 이미지
+          ? `${API_BASE_URL}/uploads/${item.productImages[0].image_URI}` 
+          : `${API_BASE_URL}/uploads/default.png`, // 기본 이미지
       }));
       setProducts(fetchedProducts);
     } catch (error) {

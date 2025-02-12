@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../css/ProductDetailPage.css";
-import macImage from "../assets/airpot2.png";
 import { useNavigate } from "react-router-dom";
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
@@ -15,6 +15,7 @@ const ProductDetails = ({ productId }) => {
   };
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
@@ -30,7 +31,13 @@ const ProductDetails = ({ productId }) => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/products/${id}`);
-        setProduct(response.data.product);
+        let _product = response.data.product;
+        console.log(response.data);
+        if (response.data.productImages !== undefined) 
+          _product.images = response.data.productImages.map((image) => `${API_BASE_URL}/uploads/${image.image_URI}`);
+        else
+          _product.images = [];
+        setProduct(_product);
 
         const likeResponse = await axios.get(`${API_BASE_URL}/products/${id}/likes?user_id=${userId}`);
         setLiked(likeResponse.data.liked);
@@ -42,13 +49,23 @@ const ProductDetails = ({ productId }) => {
     fetchProductData();
   }, [id]);
 
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+  };
+
   // ✅ 댓글 가져오기
   useEffect(() => {
     if (!id) return;
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/${id}/comments`);
+        const response = await axios.get(`${API_BASE_URL}/comments/`, {
+          params: { product_id: id },
+        });
         setComments(response.data.comments);
       } catch (error) {
         console.error("❌ 댓글을 가져오지 못했습니다.", error);
@@ -64,7 +81,8 @@ const ProductDetails = ({ productId }) => {
     if (!commentText.trim() || !product?.id) return;
 
     try {
-      await axios.post(`${API_BASE_URL}/products/${product.id}/comments`, {
+      await axios.post(`${API_BASE_URL}/comments`, {
+        product_id: product.id,
         user_id: userId,
         content: commentText,
       });
@@ -82,7 +100,7 @@ const ProductDetails = ({ productId }) => {
     if (!product?.id) return;
 
     try {
-      await axios.delete(`${API_BASE_URL}/products/${product.id}/comments/${commentId}`);
+      await axios.delete(`${API_BASE_URL}/comments/${commentId}`);
       setComments(comments.filter((comment) => comment.id !== commentId));
       console.log("🗑️ 댓글 삭제 성공");
     } catch (error) {
@@ -153,7 +171,26 @@ const ProductDetails = ({ productId }) => {
     <div className="container">
       <div className="product-section">
         <div className="image-section">
-          <img src={macImage} alt="상품 이미지" className="product-image" />
+                  {/* ✅ 이미지 슬라이더 적용 */}
+        <div className="image-slider">
+          {product.images && product.images.length > 0 ? (
+            <>
+              <img
+                src={product.images[currentImageIndex]}
+                alt={`상품 이미지 ${currentImageIndex + 1}`}
+                className="product-image"
+              />
+              <button className="prev-btn" onClick={prevImage}>
+                <ChevronLeft size={24} />
+              </button>
+              <button className="next-btn" onClick={nextImage}>
+                <ChevronRight size={24} />
+              </button>
+            </>
+          ) : (
+            <p>이미지가 없습니다.</p>
+          )}
+        </div>
         </div>
         <section className="info-section">
           <h1 className="product-title">{product.title}</h1>
