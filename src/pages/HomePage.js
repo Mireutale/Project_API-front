@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
+import { useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 import axios from "axios";
 import "../css/HomePage.css"; // CSS 파일 연결
 
@@ -69,14 +69,16 @@ const HomePage = () => {
 
       <div className="product-list">
         {products.map((product) => (
-          <div key={product.id} className="product-card">
+          <div 
+            key={product.id} 
+            className="product-card"
+            onClick={() => navigate(`/product/${product.id}`)} // ✅ 카드 클릭 시 상세 페이지 이동
+            style={{ cursor: "pointer" }} // ✅ 마우스 오버 시 클릭 가능하게 변경
+          >
             <img src={product.image} alt={product.title} className="product-image" />
             <div className="product-info">
               <h2 className="product-name">{product.title}</h2>
               <p className="product-price">{product.price}</p>
-              <Link to={`/product/${product.id}`} className="detail-button">
-                자세히 보기
-              </Link>
             </div>
           </div>
         ))}
