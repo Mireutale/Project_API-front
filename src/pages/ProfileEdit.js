@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../css/ProfileEdit.css';
 
 const ProfileEdit = () => {
     const { user, login } = useAuth();
@@ -57,7 +58,7 @@ const ProfileEdit = () => {
             <h2>프로필 수정</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>아이디:</label>
+                    <label>아이디 <span className="optional">(선택)</span>:</label>
                     <input
                         type="text"
                         value={loginId}
@@ -65,7 +66,7 @@ const ProfileEdit = () => {
                     />
                 </div>
                 <div>
-                    <label>이름:</label>
+                    <label>이름 <span className="optional">(선택)</span>:</label>
                     <input
                         type="text"
                         value={username}
@@ -73,7 +74,7 @@ const ProfileEdit = () => {
                     />
                 </div>
                 <div>
-                    <label>이메일:</label>
+                    <label>이메일 <span className="optional">(선택)</span>:</label>
                     <input
                         type="email"
                         value={email}
@@ -81,7 +82,7 @@ const ProfileEdit = () => {
                     />
                 </div>
                 <div>
-                    <label>기존 비밀번호:</label>
+                    <label>기존 비밀번호 <span className="required">*(필수)</span>:</label>
                     <input
                         type="password"
                         value={currentPassword}
@@ -89,13 +90,14 @@ const ProfileEdit = () => {
                     />
                 </div>
                 <div>
-                    <label>새 비밀번호 (변경하려면 입력):</label>
+                    <label>새 비밀번호 <span className="optional">(선택)</span>:</label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+
                 <button type="submit">수정 완료</button>
             </form>
         </div>

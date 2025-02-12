@@ -77,42 +77,44 @@
     font-weight: 300;
 }
 
+/* Mypage.css */
+
 .profile-actions {
     display: flex;
     align-items: center;
     margin-top: 20px;
-    /* 간격 늘림 */
-    gap: 20px;
-    /* 버튼 사이 간격 유지 */
+    gap: 10px;
+    /* 버튼 사이 간격 */
     justify-content: flex-end;
     /* 오른쪽 정렬 */
     margin-right: 20px;
-    /* 오른쪽 마진 유지 */
 }
 
 .edit-profile-btn {
     background-color: #ff7e00;
     color: white;
-    padding: 8px 16px;
+    padding: 12px 24px;
+    /* 버튼 크기 확대 (내부 여백 증가) */
     border: none;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 8px;
+    /* 둥근 모서리 크기 증가 */
+    font-size: 16px;
+    /* 글자 크기 확대 */
+    font-weight: bold;
+    /* 글자를 더 두껍게 */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* 클릭 시 애니메이션 추가 */
 }
 
 .edit-profile-btn:hover {
     background-color: #e67100;
+    /* 호버 시 색상 변경 */
+    transform: scale(1.05);
+    /* 살짝 커지는 효과 */
 }
 
-.delete-account-btn {
-    background: none;
-    border: none;
-    color: red;
-    text-decoration: underline;
-    font-size: 14px;
-    cursor: pointer;
-}
+
 
 .profile-info {
     display: flex;

@@ -35,7 +35,7 @@ const MyPage = () => {
                     />
                 </div>
                 <div className="profile-details">
-                    <p><strong>Login ID:</strong> {user.login_id || '정보 없음'}</p>
+                    <p><strong>ID:</strong> {user.login_id || '정보 없음'}</p>
                     <p><strong>이름:</strong> {user.username || '정보 없음'}</p>
                     <p><strong>이메일:</strong> {user.email || '정보 없음'}</p>
                     <p><strong>가입일:</strong> {user.created_at ? new Date(user.created_at * 1000).toLocaleDateString() : '정보 없음'}</p>

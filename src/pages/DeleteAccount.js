@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../css/DeleteAccount.css';
 
 const DeleteAccount = () => {
     const { logout, getToken } = useAuth();
@@ -32,7 +33,8 @@ const DeleteAccount = () => {
     return (
         <div className="delete-account-container">
             <h2>회원 탈퇴</h2>
-            <p>계정을 삭제하면 모든 데이터가 영구적으로 제거됩니다. 이 작업은 되돌릴 수 없습니다.</p>
+            <p>계정을 삭제하면 모든 데이터가 영구적으로 제거됩니다.</p>
+            <p> 이 작업은 되돌릴 수 없습니다.</p>
             <button onClick={handleDeleteAccount} className="delete-account-btn">계정 삭제</button>
         </div>
     );

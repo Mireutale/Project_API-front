@@ -14,6 +14,15 @@ const Navbar = () => {
     navigate("/mypage");
   };
 
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+    if (confirmLogout) {
+      logout();
+      alert("로그아웃 되었습니다.");
+      navigate("/"); // 홈으로 이동
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -40,7 +49,7 @@ const Navbar = () => {
               <div className="info-text">내 정보 보기</div>
             </div>
             <span className="user-name">{user?.login_id} 님</span>
-            <button onClick={logout} className="logout-btn">로그아웃</button>
+            <button onClick={handleLogout} className="logout-btn">로그아웃</button>
           </div>
         ) : (
           <>
@@ -52,5 +61,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;
