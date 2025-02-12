@@ -1,70 +1,76 @@
 /* 네비게이션 바 */
 .navbar {
-    display: flex;
-    justify-content: space-between; /* 좌우 균등 정렬 */
-    align-items: center;
-    padding: 15px 20px;
-    background-color: white;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    order: 1; /* 순서를 뒤로 변경하여 오른쪽으로 이동 */
-  }
-  
-  .logo-image {
-    padding-left: 230px;
-    padding-top: 2px;
-    width: 80px;
-  }
-  
-  /* 네비게이션 링크들 (가운데 정렬) */
-  .nav-links {
-    display: flex;
-    gap: 15px; /* 링크 간 간격 */
-    list-style: none;
-    margin: 0 auto; /* 가운데 정렬 */
-    font-weight: bold;
-  }
-  
-  .nav-links li {
-    margin-right: 15px;
-    cursor: pointer;
-  }
-  
-  .navbar-right {
-    display: flex;
-    gap: 10px;
-    padding-right: 230px;
-  }
-  
-  .navbar-right button {
-    height: 35px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #FF6F0F;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 90px;
-  }
+  display: flex;
+  justify-content: space-between;
+  /* 좌우 균등 정렬 */
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
 
-  .search-input {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .signin-btn {
-    background: none;
-    border: none;
-    font-size: 16px;  /* 기존 18px → 16px로 줄이기 */
-    padding: 4px 6px; /* 버튼 내부 여백 줄이기 */
-    width: 90px;  /* 버튼 너비 조정 */
-    cursor: pointer;
-  }
-  
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  order: 1;
+  /* 순서를 뒤로 변경하여 오른쪽으로 이동 */
+}
+
+.logo-image {
+  padding-left: 230px;
+  padding-top: 2px;
+  width: 80px;
+}
+
+/* 네비게이션 링크들 (가운데 정렬) */
+.nav-links {
+  display: flex;
+  gap: 15px;
+  /* 링크 간 간격 */
+  list-style: none;
+  margin: 0 auto;
+  /* 가운데 정렬 */
+  font-weight: bold;
+}
+
+.nav-links li {
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.navbar-right {
+  display: flex;
+  gap: 10px;
+  padding-right: 230px;
+}
+
+.navbar-right button {
+  height: 35px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #FF6F0F;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 90px;
+}
+
+.search-input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.signin-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  /* 기존 18px → 16px로 줄이기 */
+  padding: 4px 6px;
+  /* 버튼 내부 여백 줄이기 */
+  width: 90px;
+  /* 버튼 너비 조정 */
+  cursor: pointer;
+}

@@ -1,0 +1,77 @@
+/* styles.css */
+:root {
+    --carrot-orange: #ff8a3d;
+    --carrot-light-orange: #ffd8c0;
+    --carrot-dark-orange: #e67e22;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.auth-form h2 {
+    color: var(--carrot-orange);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--carrot-orange);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-form button:hover {
+    background-color: var(--carrot-dark-orange);
+}
+
+.auth-form p {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.auth-form a {
+    color: var(--carrot-orange);
+    text-decoration: none;
+}
+
+.auth-form a:hover {
+    text-decoration: underline;
+}
+
+.carrot-logo {
+    width: 80px;
+    margin: 0 auto 1rem;
+    display: block;
+}
