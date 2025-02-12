@@ -13,7 +13,6 @@
 
 .mypage-title {
     display: none;
-    /* My Page 제목 숨김 */
     text-align: center;
     font-size: 40px;
     font-weight: 600;
@@ -76,4 +75,56 @@
     font-size: 20px;
     color: #777;
     font-weight: 300;
+}
+
+.profile-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    /* 간격 늘림 */
+    gap: 20px;
+    /* 버튼 사이 간격 유지 */
+    justify-content: flex-end;
+    /* 오른쪽 정렬 */
+    margin-right: 20px;
+    /* 오른쪽 마진 유지 */
+}
+
+.edit-profile-btn {
+    background-color: #ff7e00;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-profile-btn:hover {
+    background-color: #e67100;
+}
+
+.delete-account-btn {
+    background: none;
+    border: none;
+    color: red;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.profile-image-wrapper-big {
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }

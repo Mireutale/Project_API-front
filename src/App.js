@@ -9,6 +9,8 @@ import Login from "./pages/Login"; // Login 컴포넌트 import
 import SignUp from "./pages/SignUp"; // SignUp 컴포넌트 import
 import MyPage from "./pages/MyPage"; // MyPage 컴포넌트 import
 import { AuthProvider } from "./AuthContext"; // AuthContext 추가
+import ProfileEdit from './pages/ProfileEdit';
+import DeleteAccount from './pages/DeleteAccount';
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/edit-profile" element={<ProfileEdit />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -35,12 +35,14 @@ const SignUp = () => {
 
             // 토큰 저장 및 홈페이지로 이동
             localStorage.setItem('access_token', response.data.access_token); // ✅ 일관성 있게 'access_token' 사용
+            alert('회원가입이 완료되었습니다!'); // 회원가입 완료 알림
             navigate('/'); // 홈 페이지로 이동
         } catch (error) {
             console.error('회원가입 실패:', error.response?.data || error.message);
             setError('회원가입에 실패했습니다. 입력 내용을 확인해주세요.');
         }
     };
+
 
     return (
         <div className="auth-container">

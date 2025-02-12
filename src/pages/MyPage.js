@@ -1,22 +1,31 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 import '../css/Mypage.css';
 import carrotImage from "../assets/carrot.png";
 
 const MyPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log("MyPage - Current user data:", user);
     }, [user]);
 
     if (!user) {
-        return <div className="loading-container">사용자 정보를 불러오는 중...</div>;
+        return <div>사용자 정보를 불러오는 중...</div>;
     }
+
+    const handleEditProfile = () => {
+        navigate('/edit-profile');
+    };
+
+    const handleDeleteAccount = () => {
+        navigate('/delete-account');
+    };
 
     return (
         <div className="mypage-container">
-            <h1 className="mypage-title">My Page</h1>
             <div className="profile-info">
                 <div className="profile-image-wrapper-big">
                     <img
@@ -31,6 +40,11 @@ const MyPage = () => {
                     <p><strong>이메일:</strong> {user.email || '정보 없음'}</p>
                     <p><strong>가입일:</strong> {user.created_at ? new Date(user.created_at * 1000).toLocaleDateString() : '정보 없음'}</p>
                 </div>
+            </div>
+            {/* 버튼 영역 */}
+            <div className="profile-actions">
+                <button onClick={handleEditProfile} className="edit-profile-btn">프로필 수정</button>
+                <button onClick={handleDeleteAccount} className="delete-account-btn">회원 탈퇴</button>
             </div>
         </div>
     );

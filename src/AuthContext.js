@@ -17,11 +17,9 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = (userData) => {
-        console.log("로그인 데이터:", userData); // 디버깅용 로그
-        setIsLoggedIn(true);
-        setUser(userData); // 사용자 정보를 상태에 저장
-        localStorage.setItem('user', JSON.stringify(userData)); // 로컬 스토리지에 저장
-        localStorage.setItem('access_token', userData.access_token); // 토큰 저장
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('access_token', userData.access_token);
     };
 
 

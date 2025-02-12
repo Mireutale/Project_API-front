@@ -14,6 +14,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
         try {
             const API_ENDPOINT = 'http://localhost:8000/users/token';
 
@@ -21,45 +22,29 @@ const Login = () => {
             formData.append('username', loginId);
             formData.append('password', password);
 
-            console.log('API 요청:', {
-                url: API_ENDPOINT,
-                data: formData
+            const response = await axios.post(API_ENDPOINT, formData, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
             });
 
-            const response = await axios.post(
-                API_ENDPOINT,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }
-            );
-
-            console.log('API 응답:', response.data);
-
-            // 서버에서 받은 사용자 정보를 그대로 사용
             const userData = response.data;
 
             // AuthContext의 login 함수 호출
             login(userData);
 
-            // 토큰 저장 및 홈페이지로 이동
+            // 로컬 스토리지에 저장
             localStorage.setItem('access_token', userData.access_token);
+            localStorage.setItem('refresh_token', userData.refresh_token); // Refresh Token 저장
             localStorage.setItem('user', JSON.stringify(userData));
 
-            console.log("🛠️ 저장된 토큰 확인:", localStorage.getItem("access_token"));
-            console.log("🛠️ 저장된 사용자 정보 확인:", localStorage.getItem("user"));
-
+            alert('로그인 성공!');
             navigate('/mypage');
         } catch (error) {
             console.error('로그인 실패:', error);
             if (error.response) {
-                console.error('응답 데이터:', error.response.data);
-                console.error('응답 상태 코드:', error.response.status);
                 setError(`로그인 실패: ${error.response.status} - ${error.response.data.detail || error.message}`);
             } else if (error.request) {
-                console.error('응답을 받지 못함:', error.request);
                 setError('로그인 실패: 서버에서 응답이 없습니다.');
             } else {
                 setError(`로그인 실패: ${error.message}`);
