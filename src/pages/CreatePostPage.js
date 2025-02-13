@@ -71,17 +71,17 @@ const CreatePostPage = () => {
 
       // ✅ 이미지 업로드 (FormData에 File 객체 추가)
       if (imageFiles.length > 0) {
-        const formData = new FormData();
-        imageFiles.forEach((file) => formData.append("image", file));  // ✅ File 객체 추가
-
-        await axios.post(`${API_URL}/${response.data.product.id}/image`, formData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,  
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        console.log("이미지 업로드 완료");
+        imageFiles.forEach((file) => {
+          let formData = new FormData();
+          formData.append("image", file);
+          axios.post(`${API_URL}/${response.data.product.id}/image`, formData, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,  
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          console.log("이미지 업로드 완료");
+        });        
       }
 
       // ✅ 홈 페이지로 이동
