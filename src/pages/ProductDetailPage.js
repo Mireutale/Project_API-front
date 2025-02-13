@@ -319,7 +319,6 @@ const goToChatRoom = async (productId) => {
             {product?.price?.toLocaleString() ?? "가격 정보 없음"}원
           </p>
           <div className="product-description">
-            <h3>상품 설명</h3>
             <p>{product.content}</p>
           </div>
           <div className="meta-info">
