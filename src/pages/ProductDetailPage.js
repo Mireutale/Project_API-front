@@ -32,7 +32,7 @@ console.log("🎯 현재 로그인된 user_id:", userId);
   
 
    // ✅ 상품 정보 및 좋아요 상태 가져오기
-   useEffect(() => {
+  useEffect(() => {
     if (!id) return;
 
     const fetchProductData = async () => {
@@ -357,51 +357,69 @@ const goToChatRoom = async (productId) => {
         </form>
         {!accessToken && <p style={{ color: "red" }}>로그인이 필요합니다.</p>}
 
-        {/* ✅ 댓글 목록 */}
         <ul id="comment-list">
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <li key={comment.id} className="comment-item">
-                {editingCommentId === comment.id ? (
-                  <input
-                    type="text"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                ) : (
-                  <span>{comment.content}</span>
-                )}
+  {comments.length > 0 ? (
+    comments.map((comment) => (
+      <li key={comment.id} className="comment-item">
+        {/* ✅ 유저 ID & 날짜 */}
+        <div className="comment-header">
+          <div className="comment-meta">
+            <span className="comment-user">User ID: {comment.user_id}</span>
+            <span className="comment-separator"> | </span>
+            <span className="comment-date">
+              {new Date(comment.last_modified).toLocaleString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
+            </span>
+          </div>
+        </div>
 
-                {/* ✅ 로그인된 사용자 & 본인 댓글만 수정/삭제 버튼 표시 */}
-                {userId && comment.user_id === userId && (
-                  <div className="comment-buttons">
-                    {editingCommentId === comment.id ? (
-                      <>
-                        <button onClick={() => handleUpdateComment(comment.id)}>
-                          저장
-                        </button>
-                        <button onClick={() => setEditingCommentId(null)}>
-                          취소
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button onClick={() => handleEditComment(comment)}>
-                          수정
-                        </button>
-                        <button onClick={() => handleDeleteComment(comment.id)}>
-                          삭제
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </li>
-            ))
+        {/* ✅ 항상 input과 버튼이 같은 줄에 위치 */}
+        <div className="comment-edit-container">
+          {editingCommentId === comment.id ? (
+            <input
+              type="text"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              className="comment-input"
+            />
           ) : (
-            <p>댓글이 없습니다.</p>
+            <p className="comment-content">{comment.content}</p>
           )}
-        </ul>
+
+          {/* ✅ 수정 & 삭제 버튼 (input 필드 오른쪽) */}
+          {userId && comment.user_id === userId && (
+            <div className="comment-buttons">
+              {editingCommentId === comment.id ? (
+                <>
+                  <button onClick={() => handleUpdateComment(comment.id)}>저장</button>
+                  <button onClick={() => setEditingCommentId(null)}>취소</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => handleEditComment(comment)}>수정</button>
+                  <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </li>
+    ))
+  ) : (
+    <p>댓글이 없습니다.</p>
+  )}
+</ul>
+
+
+
+
+
+
       </div>
     </div>
   );
