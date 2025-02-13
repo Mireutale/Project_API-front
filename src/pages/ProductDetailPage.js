@@ -309,6 +309,10 @@ useEffect(() => {
           <p className="product-price">
             {product?.price?.toLocaleString() ?? "가격 정보 없음"}원
           </p>
+          <div className="product-description">
+            <h3>상품 설명</h3>
+            <p>{product.content}</p>
+          </div>
           <div className="meta-info">
             <p>채팅 2 · 관심 {heartCount} · 조회 104</p>
           </div>
@@ -321,10 +325,6 @@ useEffect(() => {
               {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
             <button className="cta-btn" onClick={() => goToChatRoom(product.id)} disabled={!accessToken}>채팅하기</button>
-          </div>
-          <div className="product-description">
-            <h3>상품 설명</h3>
-            <p>{product.content}</p>
           </div>
         </section>
       </div>
