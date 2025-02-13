@@ -18,16 +18,17 @@ const ProductDetails = () => {
   const [editText, setEditText] = useState("");
   const [heartCount, setHeartCount] = useState(0);
 
-  const storedUserId = localStorage.getItem("user_id");
-  const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
-  console.log("🎯 현재 로그인된 user_id:", userId);
-  const accessToken = localStorage.getItem("access_token");
+
+const storedUserId = sessionStorage.getItem("user_id");
+const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
+console.log("🎯 현재 로그인된 user_id:", userId);
+  const accessToken = sessionStorage.getItem("access_token");
 
   // // ✅ 로그인 성공 시 사용자 정보 저장
   // const handleLoginSuccess = (userData) => {
   //   console.log("✅ 로그인 성공: ", userData); // 로그 추가
-  //   localStorage.setItem("access_token", userData.access_token);
-  //   localStorage.setItem("user_id", userData.id); // ✅ user_id 저장
+  //   sessionStorage.setItem("access_token", userData.access_token);
+  //   sessionStorage.setItem("user_id", userData.id); // ✅ user_id 저장
   // };
   
   useEffect(() => {
@@ -242,41 +243,55 @@ const ProductDetails = () => {
     getHeartCount();
   };
 
-  const goToChatRoom = async (productId) => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      alert("로그인이 필요합니다.");
-      return;
+const goToChatRoom = async (productId) => {
+  const accessToken = sessionStorage.getItem("access_token");
+  if (!accessToken) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+
+  try {
+    // 상품 정보를 가져옴 (여기서는 axios를 사용해서 상품 정보를 가져오는 예시)
+    const productResponse = await axios.get(`${API_BASE_URL}/products/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const productUserId = productResponse.data.user_id;
+    const userId = decodeJwt(accessToken).user_id;  // JWT에서 user_id를 추출하는 함수 (적절히 구현 필요)
+
+    // 채팅방 생성 요청
+    const response = await axios.post(`${API_BASE_URL}/products/${productId}/chats`, {}, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,  // 공백과 함께 Bearer 토큰을 정확히 설정
+      },
+    });
+
+    const chatroomId = response.data.chatroom_id;
+    navigate(`/chat/${chatroomId}`);
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      // 401 오류가 발생하면 로그인 만료 처리
+      alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+      sessionStorage.removeItem("access_token");  // 토큰 삭제
+      sessionStorage.removeItem("refresh_token");  // 리프레시 토큰 삭제 (필요시)
+      // 로그인 페이지로 리다이렉트
+      navigate("/login");
+    } else {
+      console.error("채팅방 생성 실패", error);
+      alert("채팅방을 만들 수 없습니다.");
     }
+  }
+};
 
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/products/${productId}/chats`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 공백과 함께 Bearer 토큰을 정확히 설정
-          },
-        }
-      );
-
-      const chatroomId = response.data.chatroom_id;
-      navigate(`/chat/${chatroomId}`);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // 401 오류가 발생하면 로그인 만료 처리
-        alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
-        localStorage.removeItem("access_token"); // 토큰 삭제
-        localStorage.removeItem("refresh_token"); // 리프레시 토큰 삭제 (필요시)
-        // 로그인 페이지로 리다이렉트
-        navigate("/login");
-      } else {
-        console.error("채팅방 생성 실패", error);
-        alert("채팅방을 만들 수 없습니다.");
-      }
-    }
-  };
-
+// JWT 토큰에서 user_id를 추출하는 함수 (예시)
+const decodeJwt = (token) => {
+  const payload = token.split('.')[1];
+  const decoded = JSON.parse(atob(payload));
+  return decoded;
+};
+  
   // ✅ **구매하기** 기능 추가
   const handlePurchase = async () => {
     if (!accessToken) {
