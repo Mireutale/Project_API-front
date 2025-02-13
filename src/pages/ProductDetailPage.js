@@ -14,12 +14,24 @@ const ProductDetails = () => {
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editText, setEditText] = useState("");
 
-  const userId = 1; // TODO: 실제 로그인된 사용자 ID 사용
+const storedUserId = localStorage.getItem("user_id");
+const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
+console.log("🎯 현재 로그인된 user_id:", userId);
   const accessToken = localStorage.getItem("access_token");
 
-  // ✅ 상품 정보 및 좋아요 상태 가져오기
-  useEffect(() => {
+  // ✅ 로그인 성공 시 사용자 정보 저장
+  const handleLoginSuccess = (userData) => {
+    console.log("✅ 로그인 성공: ", userData); // 로그 추가
+    localStorage.setItem("access_token", userData.access_token);
+    localStorage.setItem("user_id", userData.id); // ✅ user_id 저장
+  };
+  
+
+   // ✅ 상품 정보 및 좋아요 상태 가져오기
+   useEffect(() => {
     if (!id) return;
 
     const fetchProductData = async () => {
@@ -35,12 +47,6 @@ const ProductDetails = () => {
           _product.images = [];
         }
         setProduct(_product);
-
-        // 좋아요 상태 가져오기
-        const likeResponse = await axios.get(
-          `${API_BASE_URL}/products/${id}/likes?user_id=${userId}`
-        );
-        setLiked(likeResponse.data.liked);
       } catch (error) {
         console.error("❌ 데이터를 가져오지 못했습니다.", error);
       }
@@ -48,6 +54,24 @@ const ProductDetails = () => {
 
     fetchProductData();
   }, [id]);
+
+  // ✅ 좋아요 상태 가져오기 (로그인된 경우만 요청)
+  useEffect(() => {
+    if (!id || !userId) return; // ✅ userId가 없으면 요청하지 않음
+
+    const fetchLikeStatus = async () => {
+      try {
+        const likeResponse = await axios.get(`${API_BASE_URL}/products/${id}/likes`, {
+          params: { user_id: userId },
+        });
+        setLiked(likeResponse.data.liked);
+      } catch (error) {
+        console.error("❌ 좋아요 상태를 가져오지 못했습니다.", error);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [id, userId]);
 
   // ✅ 이미지 이전/다음 버튼 기능 추가
   const prevImage = () => {
@@ -63,38 +87,41 @@ const ProductDetails = () => {
   };
 
   
+// ✅ 댓글 가져오기
+useEffect(() => {
+  if (!id) return;
 
-  
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/comments`, {
+        params: { product_id: id },
+      });
+      setComments(response.data.comments);
+    } catch (error) {
+      console.error("❌ 댓글을 가져오지 못했습니다.", error);
+    }
+  };
 
-  // ✅ 댓글 가져오기
-  useEffect(() => {
-    if (!id) return;
+  fetchComments();
+}, [id]);
 
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/comments`, {
-          params: { product_id: id },
-        });
-        setComments(response.data.comments);
-      } catch (error) {
-        console.error("❌ 댓글을 가져오지 못했습니다.", error);
-      }
-    };
-
-    fetchComments();
-  }, [id]);
-
-  // ✅ 댓글 추가
+  // ✅ 댓글 추가 (로그인 필수)
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!commentText.trim() || !product?.id) return;
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    if (!commentText.trim()) return;
 
     try {
-      await axios.post(`${API_BASE_URL}/comments`, {
-        product_id: product.id,
-        user_id: userId,
-        content: commentText,
-      });
+      await axios.post(
+        `${API_BASE_URL}/comments`,
+        { product_id: id, content: commentText },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
 
       const response = await axios.get(`${API_BASE_URL}/comments`, {
         params: { product_id: id },
@@ -106,45 +133,105 @@ const ProductDetails = () => {
     }
   };
 
-  // ✅ 좋아요 추가/삭제 기능
-  const handleLikeToggle = async () => {
+  // ✅ 댓글 수정
+  const handleEditComment = (comment) => {
+    setEditingCommentId(comment.id);
+    setEditText(comment.content);
+  };
+
+  const handleUpdateComment = async (commentId) => {
     if (!accessToken) {
-      alert("로그인이 필요합니다.");
-      return;
+        console.warn("⚠️ 저장 불가: accessToken 없음");
+        return;
     }
 
-    if (!product?.id) return;
+    console.log(`✅ 댓글 수정 요청: ID ${commentId}, 내용: ${editText}`);
 
     try {
-      if (liked) {
-        await axios.delete(`${API_BASE_URL}/products/${product.id}/likes`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // ✅ 로그인 토큰 추가
-          },
-          data: { user_id: userId },
-        });
-
-        console.log("🎯 좋아요 취소 성공");
-        setLiked(false);
-      } else {
-        await axios.post(
-          `${API_BASE_URL}/products/${product.id}/likes`,
-          { user_id: userId },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`, // ✅ 로그인 토큰 추가
-            },
-          }
+        const response = await axios.put(
+            `${API_BASE_URL}/comments/${commentId}`,
+            { content: editText }, // ✅ JSON body로 `content` 전달
+            {
+                headers: {
+                    "Content-Type": "application/json", // ✅ JSON 형식으로 전달
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
         );
 
-        console.log("🎯 좋아요 추가 성공");
-        setLiked(true);
-      }
+        console.log("🎯 댓글 수정 성공", response.data);
+
+        // ✅ 수정 후 댓글 목록 다시 불러오기
+        const updatedComments = await axios.get(`${API_BASE_URL}/comments`, {
+            params: { product_id: id },
+        });
+        setComments(updatedComments.data.comments);
+        setEditingCommentId(null); // ✅ 수정 상태 초기화
     } catch (error) {
-      console.error("❌ 좋아요 변경 실패", error);
+        console.error("❌ 댓글을 수정하지 못했습니다.", error.response ? error.response.data : error);
+    }
+};
+
+
+
+
+  // ✅ 댓글 삭제
+  const handleDeleteComment = async (commentId) => {
+    if (!accessToken) return;
+
+    try {
+      await axios.delete(`${API_BASE_URL}/comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      setComments(comments.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error("❌ 댓글을 삭제하지 못했습니다.", error);
     }
   };
+
+  const handleLikeToggle = async () => {
+    if (!accessToken) {
+        alert("로그인이 필요합니다.");
+        return;
+    }
+    if (!product?.id || !userId) return; // ✅ userId가 없을 경우 요청 차단
+
+    try {
+        if (liked) {
+            // ✅ 좋아요 취소 (DELETE 요청을 JSON Body로 전송)
+            await axios.delete(`${API_BASE_URL}/products/${product.id}/likes`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                data: { user_id: userId }, // ✅ DELETE 요청의 body에 user_id 포함
+            });
+
+            console.log("🎯 좋아요 취소 성공");
+            setLiked(false);
+        } else {
+            // ✅ 좋아요 추가 (POST 요청)
+            await axios.post(
+                `${API_BASE_URL}/products/${product.id}/likes`,
+                { user_id: userId }, // ✅ JSON Body로 user_id 전달
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            console.log("🎯 좋아요 추가 성공");
+            setLiked(true);
+        }
+    } catch (error) {
+        console.error("❌ 좋아요 변경 실패", error);
+    }
+};
+
+  
 
   const goToChatRoom = () => {
     if (!accessToken) {
@@ -210,11 +297,7 @@ const ProductDetails = () => {
             >
               {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
-            <button 
-  className="cta-btn" 
-  onClick={goToChatRoom} 
-  disabled={!accessToken} // 로그인하지 않으면 버튼 비활성화
->
+            <button className="cta-btn" onClick={goToChatRoom} disabled={!accessToken}>
   채팅하기
 </button>
           </div>
@@ -224,6 +307,8 @@ const ProductDetails = () => {
       {/* ✅ 댓글 섹션 */}
       <div className="comment-section">
         <h2>댓글</h2>
+
+        {/* ✅ 댓글 작성 폼 */}
         <form id="comment-form" onSubmit={handleCommentSubmit}>
           <input
             type="text"
@@ -233,13 +318,51 @@ const ProductDetails = () => {
             onChange={(e) => setCommentText(e.target.value)}
             required
           />
-          <button type="submit">작성</button>
+          <button type="submit" disabled={!accessToken}>
+            작성
+          </button>
         </form>
+        {!accessToken && <p style={{ color: "red" }}>로그인이 필요합니다.</p>}
+
+        {/* ✅ 댓글 목록 */}
         <ul id="comment-list">
           {comments.length > 0 ? (
             comments.map((comment) => (
               <li key={comment.id} className="comment-item">
-                <span>{comment.content}</span>
+                {editingCommentId === comment.id ? (
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                ) : (
+                  <span>{comment.content}</span>
+                )}
+
+                {/* ✅ 로그인된 사용자 & 본인 댓글만 수정/삭제 버튼 표시 */}
+                {userId && comment.user_id === userId && (
+                  <div className="comment-buttons">
+                    {editingCommentId === comment.id ? (
+                      <>
+                        <button onClick={() => handleUpdateComment(comment.id)}>
+                          저장
+                        </button>
+                        <button onClick={() => setEditingCommentId(null)}>
+                          취소
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => handleEditComment(comment)}>
+                          수정
+                        </button>
+                        <button onClick={() => handleDeleteComment(comment.id)}>
+                          삭제
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
               </li>
             ))
           ) : (

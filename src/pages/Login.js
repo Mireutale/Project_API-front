@@ -14,32 +14,44 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
+    
         try {
             const API_ENDPOINT = 'http://localhost:8000/users/token';
-
+    
             const formData = new FormData();
             formData.append('username', loginId);
             formData.append('password', password);
-
+    
             const response = await axios.post(API_ENDPOINT, formData, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
-
+    
             const userData = response.data;
-
+            console.log("✅ 로그인 성공, 서버 응답 데이터:", userData);
+    
+            // ✅ user_id가 응답에 포함되는지 확인
+            if (userData.user_id) {
+                localStorage.setItem("user_id", userData.user_id);
+                console.log("✅ user_id 저장 완료:", userData.user_id);
+            } else {
+                console.warn("⚠️ user_id가 응답에 없습니다!");
+            }
+    
+            // ✅ refresh_token이 undefined인지 확인
+            if (userData.refresh_token) {
+                localStorage.setItem("refresh_token", userData.refresh_token);
+            } else {
+                console.warn("⚠️ refresh_token이 없습니다!");
+            }
+    
+            // ✅ user 객체를 JSON 문자열로 저장
+            localStorage.setItem("user", JSON.stringify(userData));
+    
             // AuthContext의 login 함수 호출
             login(userData);
-
-            // 로컬 스토리지에 저장
-            localStorage.setItem('access_token', userData.access_token);
-            localStorage.setItem('refresh_token', userData.refresh_token); // Refresh Token 저장
-            localStorage.setItem('user', JSON.stringify(userData));
-
+    
             alert('로그인 성공!');
-            navigate('/mypage');
+            window.location.reload(); // 새로고침하여 로그인 정보 반영
         } catch (error) {
             console.error('로그인 실패:', error);
             if (error.response) {
@@ -51,6 +63,7 @@ const Login = () => {
             }
         }
     };
+    
 
     return (
         <div className="auth-container">
