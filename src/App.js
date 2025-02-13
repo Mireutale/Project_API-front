@@ -13,6 +13,7 @@ import ProfileEdit from './pages/ProfileEdit';
 import DeleteAccount from './pages/DeleteAccount';
 import MyPurchases from './pages/MyPurchases';
 import MySelling from './pages/MySelling';
+import ModifyPostPage from "./pages/ModifyPostPage";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/my-purchases" element={<MyPurchases />} />
           <Route path="/my-purchases" element={<MyPurchases />} />
           <Route path="/my-selling" element={<MySelling />} />
+          <Route path="/modify-post/:product_id" element={<ModifyPostPage />} />
         </Routes>
       </Router>
     </AuthProvider>
