@@ -1,47 +1,89 @@
 /* 전체 레이아웃 */
 .container {
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 50px 20px 20px 20px;
 }
 
-/* 상품 이미지와 정보 나란히 배치 */
 .product-section {
   display: flex;
-  justify-content: space-between; /* 두 섹션 간격을 균등하게 분배 */
-  gap: 20px; /* 섹션 사이 간격 */
+  justify-content: space-between;
+  align-items: flex-start;
+  /* 추가 */
+  gap: 20px;
   margin-bottom: 20px;
-  max-width: 1200px; /* 페이지 크기 제한 */
-  width: 100%; /* 항상 100% 너비 */
-  margin: 0 auto; /* 가운데 정렬 */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .image-section {
-  flex: 1;
-  max-width: 50%; /* 최대 너비를 설정하여 화면이 커져도 비율 유지 */
+  /* flex: 1; 제거 */
+  max-width: 560px;
+  /* 수정 */
+  width: 100%;
+  /* 추가 */
+  margin-right: auto;
+  /* 추가 */
+}
+
+.info-section {
+  /* flex: 1; 제거 */
+  width: 580px;
+  /* 수정 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 16px;
+  /* max-width: 580px; 제거 */
+  min-width: 400px;
+}
+
+
+/* 이미지 슬라이더 스타일 */
+.image-slider {
+  position: relative;
+  width: 560px;
+  height: 560px;
+  overflow: hidden;
 }
 
 .product-image {
   width: 560px;
   height: 560px;
   border-radius: 8px;
-  object-fit: cover; /* 이미지 비율 유지 */
+  object-fit: cover;
 }
 
-/* 상품 정보 스타일 */
-.info-section {
-  flex: 1;
-  width: 1000px;
+.prev-btn,
+.next-btn {
+  position: absolute;
+  top: 40%;
+  /* 원래 50% 였습니다. */
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 16px;
-  max-width: 580px;
-  min-width: 400px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
+
+.image-slider:hover .prev-btn,
+.image-slider:hover .next-btn {
+  opacity: 1;
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
 
 .product-title {
   font-size: 24px;
@@ -184,7 +226,6 @@
   align-items: center;
 }
 
-/* 모든 버튼 공통 스타일 */
 .comment-buttons button {
   background-color: #ff7f50; /* ✅ 기존 작성 버튼 색상과 동일 (코랄 색) */
   color: white;
@@ -196,17 +237,42 @@
   transition: background 0.3s ease;
 }
 
-/* 버튼 마우스 오버 효과 */
 .comment-buttons button:hover {
-  background-color: #ff5722; /* ✅ 클릭 시 더 짙은 코랄색 */
+  background-color: #ff5722;
 }
 
-/* 취소 버튼 */
 .comment-buttons .cancel-btn {
   background-color: #777;
 }
 
-/* 취소 버튼 마우스 오버 효과 */
 .comment-buttons .cancel-btn:hover {
   background-color: #555;
+}
+
+.purchase-btn {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.purchase-btn:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.purchase-btn.active {
+  background-color: #FFD700;
+  color: white;
+}
+
+.purchase-btn:focus {
+  outline: none;
+}
+
+.purchase-btn:disabled {
+  color: #999;
+  cursor: not-allowed;
 }

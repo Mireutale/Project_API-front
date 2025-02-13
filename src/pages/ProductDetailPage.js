@@ -18,9 +18,9 @@ const ProductDetails = () => {
   const [editText, setEditText] = useState("");
   const [heartCount, setHeartCount] = useState(0);
 
-const storedUserId = localStorage.getItem("user_id");
-const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
-console.log("🎯 현재 로그인된 user_id:", userId);
+  const storedUserId = localStorage.getItem("user_id");
+  const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
+  console.log("🎯 현재 로그인된 user_id:", userId);
   const accessToken = localStorage.getItem("access_token");
 
   // // ✅ 로그인 성공 시 사용자 정보 저장
@@ -30,8 +30,6 @@ console.log("🎯 현재 로그인된 user_id:", userId);
   //   localStorage.setItem("user_id", userData.id); // ✅ user_id 저장
   // };
   
-
-   // ✅ 상품 정보 및 좋아요 상태 가져오기
   useEffect(() => {
     if (!id) return;
 
@@ -62,9 +60,12 @@ console.log("🎯 현재 로그인된 user_id:", userId);
 
     const fetchLikeStatus = async () => {
       try {
-        const likeResponse = await axios.get(`${API_BASE_URL}/products/${id}/likes`, {
-          params: { user_id: userId },
-        });
+        const likeResponse = await axios.get(
+          `${API_BASE_URL}/products/${id}/likes`,
+          {
+            params: { user_id: userId },
+          }
+        );
         setLiked(likeResponse.data.liked);
         setHeartCount(likeResponse.data.count);
       } catch (error) {
@@ -89,24 +90,23 @@ console.log("🎯 현재 로그인된 user_id:", userId);
     );
   };
 
-  
-// ✅ 댓글 가져오기
-useEffect(() => {
-  if (!id) return;
+  // ✅ 댓글 가져오기
+  useEffect(() => {
+    if (!id) return;
 
-  const fetchComments = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/comments`, {
-        params: { product_id: id },
-      });
-      setComments(response.data.comments);
-    } catch (error) {
-      console.error("❌ 댓글을 가져오지 못했습니다.", error);
-    }
-  };
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/comments`, {
+          params: { product_id: id },
+        });
+        setComments(response.data.comments);
+      } catch (error) {
+        console.error("❌ 댓글을 가져오지 못했습니다.", error);
+      }
+    };
 
-  fetchComments();
-}, [id]);
+    fetchComments();
+  }, [id]);
 
   // ✅ 댓글 추가 (로그인 필수)
   const handleCommentSubmit = async (e) => {
@@ -144,40 +144,39 @@ useEffect(() => {
 
   const handleUpdateComment = async (commentId) => {
     if (!accessToken) {
-        console.warn("⚠️ 저장 불가: accessToken 없음");
-        return;
+      console.warn("⚠️ 저장 불가: accessToken 없음");
+      return;
     }
 
     console.log(`✅ 댓글 수정 요청: ID ${commentId}, 내용: ${editText}`);
 
     try {
-        const response = await axios.put(
-            `${API_BASE_URL}/comments/${commentId}`,
-            { content: editText }, // ✅ JSON body로 `content` 전달
-            {
-                headers: {
-                    "Content-Type": "application/json", // ✅ JSON 형식으로 전달
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
+      const response = await axios.put(
+        `${API_BASE_URL}/comments/${commentId}`,
+        { content: editText }, // ✅ JSON body로 `content` 전달
+        {
+          headers: {
+            "Content-Type": "application/json", // ✅ JSON 형식으로 전달
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-        console.log("🎯 댓글 수정 성공", response.data);
+      console.log("🎯 댓글 수정 성공", response.data);
 
-        // ✅ 수정 후 댓글 목록 다시 불러오기
-        const updatedComments = await axios.get(`${API_BASE_URL}/comments`, {
-            params: { product_id: id },
-        });
-        setComments(updatedComments.data.comments);
-        setEditingCommentId(null); // ✅ 수정 상태 초기화
+      // ✅ 수정 후 댓글 목록 다시 불러오기
+      const updatedComments = await axios.get(`${API_BASE_URL}/comments`, {
+        params: { product_id: id },
+      });
+      setComments(updatedComments.data.comments);
+      setEditingCommentId(null); // ✅ 수정 상태 초기화
     } catch (error) {
-        console.error("❌ 댓글을 수정하지 못했습니다.", error.response ? error.response.data : error);
+      console.error(
+        "❌ 댓글을 수정하지 못했습니다.",
+        error.response ? error.response.data : error
+      );
     }
-};
-
-
-
-
+  };
   // ✅ 댓글 삭제
   const handleDeleteComment = async (commentId) => {
     if (!accessToken) return;
@@ -194,86 +193,121 @@ useEffect(() => {
   };
   const getHeartCount = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
-        setHeartCount(response.data.product.heart_count);
+      const response = await axios.get(`${API_BASE_URL}/products/${id}`);
+      setHeartCount(response.data.product.heart_count);
     } catch (error) {
       console.error("좋아요 개수를 가져오지 못했습니다.", error);
-    }};
+    }
+  };
   const handleLikeToggle = async () => {
     console.log("🎯 좋아요 토글");
     if (!accessToken) {
-        alert("로그인이 필요합니다.");
-        return;
+      alert("로그인이 필요합니다.");
+      return;
     }
     if (!product?.id || !userId) return; // ✅ userId가 없을 경우 요청 차단
 
     try {
-        if (liked) {
-            // ✅ 좋아요 취소 (DELETE 요청을 JSON Body로 전송)
-            await axios.delete(`${API_BASE_URL}/products/${product.id}/likes`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                data: { user_id: userId }, // ✅ DELETE 요청의 body에 user_id 포함
-            });
+      if (liked) {
+        // ✅ 좋아요 취소 (DELETE 요청을 JSON Body로 전송)
+        await axios.delete(`${API_BASE_URL}/products/${product.id}/likes`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: { user_id: userId }, // ✅ DELETE 요청의 body에 user_id 포함
+        });
 
-            console.log("🎯 좋아요 취소 성공");
-            setLiked(false);
-        } else {
-            // ✅ 좋아요 추가 (POST 요청)
-            await axios.post(
-                `${API_BASE_URL}/products/${product.id}/likes`,
-                { user_id: userId }, // ✅ JSON Body로 user_id 전달
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
+        console.log("🎯 좋아요 취소 성공");
+        setLiked(false);
+      } else {
+        // ✅ 좋아요 추가 (POST 요청)
+        await axios.post(
+          `${API_BASE_URL}/products/${product.id}/likes`,
+          { user_id: userId }, // ✅ JSON Body로 user_id 전달
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-            console.log("🎯 좋아요 추가 성공");
-            setLiked(true);
-        }
+        console.log("🎯 좋아요 추가 성공");
+        setLiked(true);
+      }
     } catch (error) {
-        console.error("❌ 좋아요 변경 실패", error);
+      console.error("❌ 좋아요 변경 실패", error);
     }
     getHeartCount();
-};
+  };
 
-const goToChatRoom = async (productId) => {
-  const accessToken = localStorage.getItem("access_token");
-  if (!accessToken) {
+  const goToChatRoom = async (productId) => {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
       alert("로그인이 필요합니다.");
       return;
-  }
+    }
 
-  try {
-    const response = await axios.post(`${API_BASE_URL}/products/${productId}/chats`, {}, {
-      headers: {
-          Authorization: `Bearer ${accessToken}`  // 공백과 함께 Bearer 토큰을 정확히 설정
-      },
-    });
-      
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/products/${productId}/chats`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 공백과 함께 Bearer 토큰을 정확히 설정
+          },
+        }
+      );
+
       const chatroomId = response.data.chatroom_id;
       navigate(`/chat/${chatroomId}`);
-  } catch (error) {
+    } catch (error) {
       if (error.response && error.response.status === 401) {
-          // 401 오류가 발생하면 로그인 만료 처리
-          alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
-          localStorage.removeItem("access_token");  // 토큰 삭제
-          localStorage.removeItem("refresh_token");  // 리프레시 토큰 삭제 (필요시)
-          // 로그인 페이지로 리다이렉트
-          navigate("/login");
+        // 401 오류가 발생하면 로그인 만료 처리
+        alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+        localStorage.removeItem("access_token"); // 토큰 삭제
+        localStorage.removeItem("refresh_token"); // 리프레시 토큰 삭제 (필요시)
+        // 로그인 페이지로 리다이렉트
+        navigate("/login");
       } else {
-          console.error("채팅방 생성 실패", error);
-          alert("채팅방을 만들 수 없습니다.");
+        console.error("채팅방 생성 실패", error);
+        alert("채팅방을 만들 수 없습니다.");
       }
-  }
-};
+    }
+  };
 
+  // ✅ **구매하기** 기능 추가
+  const handlePurchase = async () => {
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
 
+    try {
+      // **✅ 구매 API 호출 (실제 API 엔드포인트에 맞게 수정)**
+      const response = await axios.post(
+        `${API_BASE_URL}/products/${id}/purchase`, // 예시 URL
+        {}, // 필요한 경우 request body 추가
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // **✅ 구매 성공 알림 또는 처리**
+      alert("상품 구매 대기가 완료되었습니다.");
+      console.log("✅ 상품 구매 대기 성공:", response.data);
+
+      // **✅ 구매 후 처리 (예: 페이지 리디렉션, 상태 업데이트 등)**
+      // 예시: 구매 완료 페이지로 이동
+      // navigate('/purchase-complete');
+    } catch (error) {
+      console.error("❌ 상품 구매 대기 중 오류 발생:", error);
+      alert("상품 구매 대기에 실패했습니다.");
+    }
+  };
 
   // ✅ 카테고리 옵션 목록
   const categories = [
@@ -313,7 +347,10 @@ const goToChatRoom = async (productId) => {
         <section className="info-section">
           <h1 className="product-title">{product.title}</h1>
           <p className="product-category">
-            {categories.find((c) => c.id === product.category_id)?.name || "기타"}
+            {
+              categories.find((c) => c.id === product.category_id)?.name ||
+              "기타"
+            }
           </p>
           <p className="product-price">
             {product?.price?.toLocaleString() ?? "가격 정보 없음"}원
@@ -325,14 +362,28 @@ const goToChatRoom = async (productId) => {
             <p>채팅 2 · 관심 {heartCount} · 조회 104</p>
           </div>
           <div className="button-section">
-            <button 
-              className={`like-btn ${liked ? "liked" : ""}`} 
-              onClick={handleLikeToggle} 
+            <button
+              className={`like-btn ${liked ? "liked" : ""}`}
+              onClick={handleLikeToggle}
               disabled={!accessToken} // 로그인되지 않으면 버튼 비활성화
             >
-              {liked ? "💖 관심 등록" : "🤍 관심 등록"}
+              {liked ? "💖" : "🤍"}
             </button>
-            <button className="cta-btn" onClick={() => goToChatRoom(product.id)} disabled={!accessToken}>채팅하기</button>
+            <button
+              className="cta-btn"
+              onClick={() => goToChatRoom(product.id)}
+              disabled={!accessToken}
+            >
+              채팅하기
+            </button>
+            {/* **✅ 구매하기 버튼 추가** */}
+            <button
+              className="purchase-btn"
+              onClick={handlePurchase}
+              disabled={!accessToken}
+            >
+              🔔
+            </button>
           </div>
         </section>
       </div>
@@ -414,11 +465,6 @@ const goToChatRoom = async (productId) => {
     <p>댓글이 없습니다.</p>
   )}
 </ul>
-
-
-
-
-
 
       </div>
     </div>
