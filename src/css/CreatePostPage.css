@@ -1,6 +1,7 @@
 /* 전체 컨테이너 */
 .create-post-container {
-  max-width: 700px; /* ✅ 입력 공간을 넓게 조정 */
+  max-width: 700px;
+  /* ✅ 입력 공간을 넓게 조정 */
   margin: 0 auto;
   padding: 30px;
   text-align: center;
@@ -119,7 +120,8 @@
 }
 
 .input-field:focus {
-  border-bottom: 2px solid #ff5722; /* 포커스 시 강조 */
+  border-bottom: 2px solid #ff5722;
+  /* 포커스 시 강조 */
 }
 
 /* 읽기 전용 필드 */

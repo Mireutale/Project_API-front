@@ -24,6 +24,14 @@ const MyPage = () => {
         navigate('/delete-account');
     };
 
+    const handleViewPurchases = () => {
+        navigate('/my-purchases');
+    };
+
+    const handleViewSelling = () => {
+        navigate('/my-selling'); // 판매 내역 페이지로 이동
+    };
+
     return (
         <div className="mypage-container">
             <div className="profile-info">
@@ -45,6 +53,19 @@ const MyPage = () => {
             <div className="profile-actions">
                 <button onClick={handleEditProfile} className="edit-profile-btn">프로필 수정</button>
                 <button onClick={handleDeleteAccount} className="delete-account-btn">회원 탈퇴</button>
+            </div>
+            <br></br>
+            <hr></hr>
+            {/* 구매/판매 내역 섹션 */}
+            <div className="history-section">
+                <div onClick={handleViewPurchases} className="history-card purchase-card">
+                    <h3>구매 내역</h3>
+                    <p>지금까지 구매한 상품 목록을 확인하세요.</p>
+                </div>
+                <div onClick={handleViewSelling} className="history-card selling-card">
+                    <h3>판매 내역</h3>
+                    <p>지금까지 판매한 상품 목록을 확인하세요.</p>
+                </div>
             </div>
         </div>
     );
