@@ -1,57 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../AuthContext';
-import '../css/MySelling.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../css/MySelling.css";
+
+const API_BASE_URL = "http://localhost:8000";
 
 const MySelling = () => {
-    const [sellingItems, setSellingItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const { user } = useAuth();
+    const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchSellingItems = async () => {
-            if (!user || !user.id) {
-                setError("사용자 정보를 찾을 수 없습니다.");
-                setLoading(false);
-                return;
-            }
+        fetchMyProducts();
+    }, []);
 
-            try {
-                const response = await fetch(`http://localhost:8000/${user.id}/selling`); if (!response.ok) {
-                    throw new Error('서버에서 판매 내역을 가져오는데 실패했습니다.');
-                }
-                const data = await response.json();
-                setSellingItems(data.my_selling_list);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+    const fetchMyProducts = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/users/selling`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+            });
+            setProducts(response.data.my_selling_list);
+        } catch (error) {
+            console.error("내가 올린 상품 목록을 불러오지 못했습니다.", error);
+        }
+    };
 
-        fetchSellingItems();
-    }, [user]);
-
-    if (loading) return <div>판매 내역을 불러오는 중...</div>;
-    if (error) return <div>에러: {error}</div>;
+    const handleCreatePost = () => {
+        navigate("/create-post");
+    };
 
     return (
-        <div className="myselling-container">
-            <h2>내 판매 내역</h2>
-            {sellingItems.length === 0 ? (
-                <p>판매 내역이 없습니다.</p>
-            ) : (
-                <ul className="selling-list">
-                    {sellingItems.map((item) => (
-                        <li key={item.id} className="selling-item">
-                            <h3>{item.title}</h3>
-                            <p>가격: {item.price}원</p>
-                            <p>상태: {item.soldout ? '판매 완료' : '판매 중'}</p>
-                            <p>등록일: {new Date(item.date).toLocaleDateString()}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
+        <div className="myselling-page">
+            <h1 className="title">내가 올린 매물</h1>
+
+            <table className="product-table">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>가격</th>
+                        <th>자세히 보기</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {products.length === 0 ? (
+                        <tr>
+                            <td colSpan="4">올린 상품이 없습니다.</td>
+                        </tr>
+                    ) : (
+                        products.map((product, index) => (
+                            <tr key={product.id}>
+                                <td>{index + 1}</td>
+                                <td>{product.title}</td>
+                                <td>{product.price}</td>
+                                <td>
+                                    <Link to={`/product/${product.id}`} className="myselling-detail-button">
+                                        자세히 보기
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+
+            <button className="floating-add-button" onClick={handleCreatePost}>
+                +
+            </button>
         </div>
     );
 };

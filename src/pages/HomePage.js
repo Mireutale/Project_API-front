@@ -1,88 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/HomePage.css"; // CSS 파일 연결
+import "../css/MySelling.css";
 
-const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
+const API_BASE_URL = "http://localhost:8000";
 
-const HomePage = () => {
+const MySelling = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
-  const navigate = useNavigate(); // ✅ 페이지 이동 함수 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProducts();
-  }, []); // 초기 로딩 시 데이터 가져오기
+    fetchMyProducts();
+  }, []);
 
-  // ✅ 상품 목록 API 요청 (검색어 포함)
-  const fetchProducts = async (query = "") => {
+  const fetchMyProducts = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/products`, {
-        params: { q: query }, // 쿼리 파라미터 추가
+      const response = await axios.get(`${API_BASE_URL}/users/selling`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
       });
-
-      const fetchedProducts = response.data.map((item) => ({
-        id: item.product.id,
-        title: item.product.title,
-        price: item.product.price.toLocaleString() + "원",
-        image: item.productImages.length > 0 
-          ? `${API_BASE_URL}/uploads/${item.productImages[0].image_URI}` 
-          : `${API_BASE_URL}/uploads/default.png`, // 기본 이미지
-      }));
-      setProducts(fetchedProducts);
+      setProducts(response.data.my_selling_list);
     } catch (error) {
-      console.error("❌ 상품 목록을 불러오지 못했습니다.", error);
+      console.error("내가 올린 상품 목록을 불러오지 못했습니다.", error);
     }
   };
 
-  // ✅ 검색어 변경 시 상태 업데이트
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // ✅ 검색 실행 (Enter 키 또는 버튼 클릭 시)
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    fetchProducts(searchTerm); // 검색어를 포함하여 API 요청
-  };
-
-  // ✅ 게시물 작성 페이지로 이동하는 함수
   const handleCreatePost = () => {
-    navigate("/create-post"); // `/create-post` 경로로 이동
+    navigate("/create-post");
   };
 
   return (
-    <div className="homepage">
-      <h1 className="title">중고거래 인기매물</h1>
-
-      {/* 🔍 검색 입력 필드 추가 */}
-      <form className="search-bar" onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          placeholder="상품 검색..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="search-input"
-        />
-        <button type="submit" className="search-button">검색</button>
-      </form>
+    <div className="myselling-page">
+      <h1 className="title">내가 올린 매물</h1>
 
       <div className="product-list">
-        {products.map((product) => (
-          <div key={product.id} className="product-card">
-            <img src={product.image} alt={product.title} className="product-image" />
-            <div className="product-info">
-              <h2 className="product-name">{product.title}</h2>
-              <p className="product-price">{product.price}</p>
-              <Link to={`/product/${product.id}`} className="detail-button">
-                자세히 보기
-              </Link>
+        {products.length === 0 ? (
+          <p>올린 상품이 없습니다.</p>
+        ) : (
+          products.map((product) => (
+            <div key={product.id} className="product-block">
+              <div className="product-info">
+                <h2 className="product-name">{product.title}</h2>
+                <p className="product-price">{product.price.toLocaleString()}원</p>
+                <Link to={`/product/${product.id}`} className="myselling-detail-button">
+                  자세히 보기
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
-      {/* ✅ 오른쪽 하단에 동그란 + 버튼 추가 */}
       <button className="floating-add-button" onClick={handleCreatePost}>
         +
       </button>
@@ -90,4 +59,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default MySelling;
