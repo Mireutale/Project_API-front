@@ -322,6 +322,10 @@ useEffect(() => {
             </button>
             <button className="cta-btn" onClick={() => goToChatRoom(product.id)} disabled={!accessToken}>채팅하기</button>
           </div>
+          <div className="product-description">
+            <h3>상품 설명</h3>
+            <p>{product.content}</p>
+          </div>
         </section>
       </div>
 
