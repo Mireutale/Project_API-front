@@ -11,12 +11,11 @@ const ProfileEdit = () => {
     const [email, setEmail] = useState(user.email);
     const [loginId, setLoginId] = useState(user.login_id);
     const [password, setPassword] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');  // 기존 비밀번호 필드 추가
+    const [currentPassword, setCurrentPassword] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 로컬 스토리지에서 access_token 가져오기
         const accessToken = localStorage.getItem('access_token');
 
         if (!accessToken) {
@@ -31,20 +30,24 @@ const ProfileEdit = () => {
                     login_id: loginId,
                     username,
                     email,
-                    password: password || undefined,  // 비밀번호가 있을 때만 보냄
-                    current_password: currentPassword // 기존 비밀번호 추가
+                    password: password || undefined,
+                    current_password: currentPassword
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${accessToken}`, // 토큰을 Authorization 헤더에 포함
+                        Authorization: `Bearer ${accessToken}`,
                     }
                 }
             );
 
+            // 새 토큰 저장
+            if (response.data.access_token) {
+                localStorage.setItem('access_token', response.data.access_token);
+            }
+
             // AuthContext 사용자 정보 갱신
             login(response.data);
 
-            // 성공 메시지 표시 및 리다이렉트
             alert('프로필 수정이 완료되었습니다.');
             navigate('/mypage');
         } catch (error) {
@@ -90,7 +93,7 @@ const ProfileEdit = () => {
                     />
                 </div>
                 <div>
-                    <label>새 비밀번호 <span className="optional">(선택)</span>:</label>
+                    <label>새 비밀번호 <span className="required">*(필수)</span>:</label>
                     <input
                         type="password"
                         value={password}

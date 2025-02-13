@@ -30,6 +30,27 @@ const MySelling = () => {
         navigate("/create-post");
     };
 
+    const handleEdit = (productId) => {
+        // 수정 로직 구현
+        navigate(`/edit-product/${productId}`);
+    };
+
+    const handleDelete = async (productId) => {
+        // 삭제 로직 구현
+        if (window.confirm("정말로 이 상품을 삭제하시겠습니까?")) {
+            try {
+                await axios.delete(`${API_BASE_URL}/products/${productId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    },
+                });
+                fetchMyProducts(); // 상품 목록 새로고침
+            } catch (error) {
+                console.error("상품 삭제 중 오류가 발생했습니다.", error);
+            }
+        }
+    };
+
     return (
         <div className="myselling-page">
             <h1 className="title">내가 판매중인 상품</h1>
@@ -41,12 +62,14 @@ const MySelling = () => {
                         <th>제목</th>
                         <th>가격</th>
                         <th>자세히 보기</th>
+                        <th>수정</th>
+                        <th>삭제</th>
                     </tr>
                 </thead>
                 <tbody>
                     {products.length === 0 ? (
                         <tr className="empty-row">
-                            <td colSpan="4" className="empty-cell">
+                            <td colSpan="6" className="empty-cell">
                                 <div className="empty-state">판매중인 상품이 없습니다.</div>
                             </td>
                         </tr>
@@ -61,6 +84,16 @@ const MySelling = () => {
                                         자세히 보기
                                     </Link>
                                 </td>
+                                <td>
+                                    <button onClick={() => handleEdit(product.id)} className="myselling-edit-button">
+                                        수정
+                                    </button>
+                                </td>
+                                <td>
+                                    <button onClick={() => handleDelete(product.id)} className="myselling-delete-button">
+                                        삭제
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     )}
@@ -72,7 +105,6 @@ const MySelling = () => {
             </button>
         </div>
     );
-
 };
 
 export default MySelling;
