@@ -32,17 +32,8 @@ const ChatList = ({ userId, onSelectChatroom }) => {
         <ul className="chat-list">
           {chatrooms.map((room) => (
             <li key={room.id} className="chat-list-item">
-              <button
-                onClick={() => {
-                  // seller_id와 receiver_id가 동일한지 확인
-                  if (room.chat_seller === room.chat_buyer) {
-                    alert("Seller와 Buyer가 동일합니다. 채팅방을 선택할 수 없습니다.");
-                    return;  // 동일하면 onSelectChatroom을 호출하지 않음
-                  }
-                  // seller_id와 receiver_id가 다르면 onSelectChatroom 호출
-                  onSelectChatroom(room.id, room.chat_seller, room.chat_buyer);
-                  }}>
-                  {room.id}번 채팅방 (상품 ID: {room.product_id})
+              <button onClick={() => onSelectChatroom(room.id, room.chat_seller, room.chat_buyer)}>
+                {room.id}번 채팅방 (상품 ID: {room.product_id})
               </button>
             </li>
           ))}
@@ -54,6 +45,7 @@ const ChatList = ({ userId, onSelectChatroom }) => {
   );  
 };
 
+// 채팅방 컴포넌트
 const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -68,7 +60,6 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
       return;
     }
 
-    // 메시지 불러오기
     const fetchMessages = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/chats/${chatroomId}`, {
@@ -84,54 +75,57 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
 
     fetchMessages();
 
-    // WebSocket 연결 설정
-    const ws = new WebSocket(`ws://localhost:8000/chats/${chatroomId}/messages?user_id=${userId}`);
+    // // WebSocket 연결
+    // const ws = new WebSocket(`http://localhost:8000/chats/${chatroomId}/messages`);
+    
+    // ws.onopen = () => {
+    //   setSocketStatus("open");
+    //   console.log("WebSocket 연결 성공");
 
-    ws.onopen = () => {
-      setSocketStatus("open");
-      console.log("WebSocket 연결 성공");
+    //   // 연결된 상태에서 대기 중인 메시지를 전송
+    //   pendingMessages.forEach((msg) => {
+    //     ws.send(JSON.stringify(msg));
+    //   });
+    //   setPendingMessages([]); // 대기 중인 메시지 초기화
+    // };
 
-      // 연결된 상태에서 대기 중인 메시지 전송
-      pendingMessages.forEach((msg) => {
-        ws.send(JSON.stringify(msg));
-      });
-      setPendingMessages([]); // 대기 중인 메시지 초기화
-    };
+    // ws.onmessage = (event) => {
+    //   try {
+    //     const messageData = JSON.parse(event.data);
+    //     setMessages((prev) => [...prev, messageData]);
+    //   } catch (error) {
+    //     console.error("WebSocket 메시지 처리 오류:", error);
+    //   }
+    // };
 
-    ws.onmessage = (event) => {
-      try {
-        const messageData = JSON.parse(event.data);
-        setMessages((prev) => [...prev, messageData]);
-      } catch (error) {
-        console.error("WebSocket 메시지 처리 오류:", error);
-      }
-    };
+    // ws.onerror = (error) => {
+    //   console.error("WebSocket 에러:", error);
+    // };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket 에러:", error);
-    };
+    // ws.onclose = () => {
+    //   setSocketStatus("closed");
+    //   console.log("WebSocket 연결 종료");
+    // };
 
-    ws.onclose = () => {
-      setSocketStatus("closed");
-      console.log("WebSocket 연결 종료");
-    };
+    // setSocket(ws);
 
-    setSocket(ws);
+    // // WebSocket 연결 상태를 계속 확인하는 setInterval
+    // const checkConnection = setInterval(() => {
+    //   if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) {
+    //     console.log("WebSocket이 끊어졌습니다. 재연결 시도 중...");
+    //     // 재연결을 위한 코드 추가
+    //     setSocket(new WebSocket(`http://localhost:8000/chats/${chatroomId}/messages`));
+    //   }
+    // }, 5000); // 5초마다 연결 상태 체크
 
-    // WebSocket 연결 상태를 계속 확인하는 setInterval
-    const checkConnection = setInterval(() => {
-      if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) {
-        console.log("WebSocket이 끊어졌습니다. 재연결 시도 중...");
-        // 재연결을 위한 코드 추가
-        setSocket(new WebSocket(`ws://localhost:8000/chats/${chatroomId}/messages?user_id=${userId}`));
-      }
-    }, 50000); // 50초마다 연결 상태 체크
+    // return () => {
+    //   clearInterval(checkConnection); // 컴포넌트 언마운트 시 setInterval 제거
+    //   ws.close(); // WebSocket 연결 종료
+    // };
+    const intervalId = setInterval(fetchMessages, 1000);
 
-    // 컴포넌트 언마운트 시 clean up
-    return () => {
-      clearInterval(checkConnection); // setInterval 제거
-      ws.close(); // WebSocket 연결 종료
-    };
+    // 컴포넌트가 언마운트될 때 interval 정리
+    return () => clearInterval(intervalId);
   }, [chatroomId, userId, pendingMessages]);
 
   const sendMessage = async () => {
@@ -147,7 +141,6 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
       };
 
       try {
-        // 메시지 서버로 전송
         const response = await axios.post(
           `http://localhost:8000/chats/${chatroomId}/messages`,
           msgData,
@@ -162,11 +155,10 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
         setMessages((prev) => [...prev, response.data]);
         setMessage("");
 
-        // WebSocket이 연결되었으면 메시지를 바로 전송
         if (socket && socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(msgData)); // 웹소켓으로 메시지 전송
         } else {
-          // WebSocket 연결되지 않으면 메시지를 대기 중으로 저장
+          // 웹소켓 연결되지 않으면 메시지를 대기 중으로 저장
           setPendingMessages((prev) => [...prev, msgData]);
           console.log("WebSocket이 연결되지 않았습니다. 메시지가 대기 중입니다.");
         }
@@ -196,7 +188,6 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
     </div>
   );
 };
-
 
 // 전체 채팅 애플리케이션 컴포넌트
 const ChatApp = () => {
