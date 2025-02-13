@@ -60,12 +60,42 @@
     text-decoration: none;
     border-radius: 5px;
     font-size: 14px;
+    border: none;
 }
 
 .myselling-detail-button:hover {
     background-color: #45a049;
 }
 
+.myselling-modify-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+}
+
+.myselling-modify-button:hover {
+    background-color: #3498DB;
+    transform: scale(1.05); 
+}
+
+.myselling-delete-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #DC3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+}
+.myselling-delete-button:hover {
+    background-color: #C82333;
+}
 /* 오른쪽 하단 추가 버튼 스타일 */
 .floating-add-button {
     position: fixed;

@@ -30,6 +30,28 @@ const MySelling = () => {
         navigate("/create-post");
     };
 
+    const handleModifyPost = (id) => {
+        navigate(`/modify-post/${id}`);
+    };
+    
+    const handleDeletePost = async (id) => {
+        const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+        if (!confirmDelete) {
+            return;
+        }
+        axios.delete(`${API_BASE_URL}/products/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+        })
+        .then(() => {
+            alert("상품이 삭제되었습니다.");
+            fetchMyProducts();
+        })
+        .catch((error) => {
+            console.error("상품 삭제에 실패했습니다.", error);
+        });
+    };
     return (
         <div className="myselling-page">
             <h1 className="title">내가 판매중인 상품</h1>
@@ -60,6 +82,8 @@ const MySelling = () => {
                                     <Link to={`/product/${product.id}`} className="myselling-detail-button">
                                         자세히 보기
                                     </Link>
+                                    <button className="myselling-modify-button" onClick={() => handleModifyPost(product.id)}>수정</button>
+                                    <button className="myselling-delete-button" onClick={() => handleDeletePost(product.id)}>삭제</button>
                                 </td>
                             </tr>
                         ))
