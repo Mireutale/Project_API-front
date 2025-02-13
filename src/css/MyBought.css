@@ -16,6 +16,74 @@
     color: #333;
 }
 
+/* 기존 스타일 유지 */
+
+.mybought-delete-button {
+    background-color: #ff4d4d;
+    /* 빨간색 배경 */
+    color: white;
+    /* 흰색 글자 */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.mybought-delete-button:hover {
+    background-color: #ff3333;
+    /* 호버 시 더 진한 빨간색 */
+}
+
+
+/* 테이블 헤더 스타일 수정 */
+.product-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+}
+
+/* 테이블 셀 정렬 */
+.product-table td {
+    text-align: center;
+}
+
+/* 자세히 보기 버튼 스타일 수정 */
+.mybought-detail-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.mybought-detail-button:hover {
+    background-color: #45a049;
+}
+
+/* 테이블 반응형 스타일 */
+@media (max-width: 768px) {
+    .product-table {
+        font-size: 14px;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 8px 10px;
+    }
+
+    .mybought-detail-button,
+    .delete-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
 /* 테이블 스타일 */
 .product-table {
     width: 100%;

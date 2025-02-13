@@ -86,7 +86,7 @@ const MySelling = () => {
                     </Link>
                 </td>
                 <td>
-                    <button onClick={() => handleModifyPost(product.id)} className="myselling-edit-button">
+                    <button onClick={() => handleModifyPost(product.id)} className="myselling-modify-button">
                         수정
                     </button>
                 </td>
