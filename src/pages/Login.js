@@ -32,7 +32,7 @@ const Login = () => {
     
             // ✅ user_id (id) 저장
             if (userData.id) {
-                localStorage.setItem("user_id", userData.id);
+                sessionStorage.setItem("user_id", userData.id);
                 console.log("✅ user_id 저장 완료:", userData.id);
             } else {
                 console.warn("⚠️ user_id가 응답에 없습니다!");
@@ -40,7 +40,7 @@ const Login = () => {
     
             // ✅ access_token 저장 (로그인 후 받은 토큰)
             if (userData.access_token) {
-                localStorage.setItem("access_token", userData.access_token);
+                sessionStorage.setItem("access_token", userData.access_token);
                 console.log("✅ access_token 저장 완료:", userData.access_token);
             } else {
                 console.warn("⚠️ access_token이 응답에 없습니다!");
@@ -48,13 +48,13 @@ const Login = () => {
     
             // ✅ refresh_token 저장 (백엔드에서 제공되지 않으면 생략 가능)
             if (userData.refresh_token) {
-                localStorage.setItem("refresh_token", userData.refresh_token);
+                sessionStorage.setItem("refresh_token", userData.refresh_token);
             } else {
                 console.warn("⚠️ refresh_token이 없습니다!");
             }
     
             // ✅ user 객체 저장 (전체 정보 포함)
-            localStorage.setItem("user", JSON.stringify(userData));
+            sessionStorage.setItem("user", JSON.stringify(userData));
     
             // AuthContext의 login 함수 호출
             login(userData);
