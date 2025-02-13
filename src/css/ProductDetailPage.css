@@ -166,9 +166,9 @@
 }
 
 .comment-item input {
-  width: 80%;
-  padding: 10px;
-  font-size: 16px;
+  width: 80%; /* ✅ 가로 전체 차지 */
+  padding: 10px; /* ✅ 내부 여백 증가 */
+  font-size: 16px; /* ✅ 글씨 크기 증가 */
   border: 1px solid #ddd;
   border-radius: 5px;
   outline: none;
@@ -196,26 +196,41 @@
 
 .comment-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ 전체를 왼쪽 정렬 */
   background: #f9f9f9;
   padding: 10px;
   margin-bottom: 5px;
   border-radius: 5px;
+  width: 100%;
 }
 
+/* ✅ input 필드와 버튼을 같은 줄에 배치 */
+.comment-edit-container {
+  display: flex;
+  align-items: center; /* ✅ input과 버튼을 같은 줄에 배치 */
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.comment-input {
+  flex-grow: 1; /* ✅ input 필드가 가능한 최대 너비를 차지 */
+  padding: 5px;
+}
+
+/* 버튼 스타일 */
 .comment-buttons {
   display: flex;
   gap: 5px;
   align-items: center;
-  justify-content: flex-end;
 }
 
 .comment-buttons button {
-  background-color: #ff7f50;
+  background-color: #ff7f50; /* ✅ 기존 작성 버튼 색상과 동일 (코랄 색) */
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 10px 10px;
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
