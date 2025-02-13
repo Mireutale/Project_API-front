@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/styles.css';
 import { useAuth } from '../AuthContext';
@@ -8,7 +9,7 @@ const Login = () => {
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // navigate 추가
     const { login } = useAuth();
 
     const handleSubmit = async (e) => {
@@ -37,6 +38,14 @@ const Login = () => {
                 console.warn("⚠️ user_id가 응답에 없습니다!");
             }
     
+            // ✅ access_token 저장 (로그인 후 받은 토큰)
+            if (userData.access_token) {
+                localStorage.setItem("access_token", userData.access_token);
+                console.log("✅ access_token 저장 완료:", userData.access_token);
+            } else {
+                console.warn("⚠️ access_token이 응답에 없습니다!");
+            }
+    
             // ✅ refresh_token 저장 (백엔드에서 제공되지 않으면 생략 가능)
             if (userData.refresh_token) {
                 localStorage.setItem("refresh_token", userData.refresh_token);
@@ -51,7 +60,9 @@ const Login = () => {
             login(userData);
     
             alert('로그인 성공!');
-            window.location.reload(); // 새로고침하여 로그인 정보 반영
+    
+            // 홈 화면으로 이동
+            navigate('/'); // 홈 화면으로 이동
         } catch (error) {
             console.error('로그인 실패:', error);
             if (error.response) {
@@ -63,8 +74,6 @@ const Login = () => {
             }
         }
     };
-    
-    
 
     return (
         <div className="auth-container">
