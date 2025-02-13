@@ -23,12 +23,12 @@ const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Nu
 console.log("🎯 현재 로그인된 user_id:", userId);
   const accessToken = localStorage.getItem("access_token");
 
-  // ✅ 로그인 성공 시 사용자 정보 저장
-  const handleLoginSuccess = (userData) => {
-    console.log("✅ 로그인 성공: ", userData); // 로그 추가
-    localStorage.setItem("access_token", userData.access_token);
-    localStorage.setItem("user_id", userData.id); // ✅ user_id 저장
-  };
+  // // ✅ 로그인 성공 시 사용자 정보 저장
+  // const handleLoginSuccess = (userData) => {
+  //   console.log("✅ 로그인 성공: ", userData); // 로그 추가
+  //   localStorage.setItem("access_token", userData.access_token);
+  //   localStorage.setItem("user_id", userData.id); // ✅ user_id 저장
+  // };
   
 
    // ✅ 상품 정보 및 좋아요 상태 가져오기
@@ -242,29 +242,38 @@ useEffect(() => {
     getHeartCount();
 };
 
-  const goToChatRoom = async (productId) => {
-    const accessToken = localStorage.getItem("access_token"); // localStorage에서 직접 accessToken을 가져옴
-    if (!accessToken) {
-        alert("로그인이 필요합니다.");
-        return;
-    }
+const goToChatRoom = async (productId) => {
+  const accessToken = localStorage.getItem("access_token");
+  if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+  }
 
-    try {
-        // 채팅방 생성 요청
-        const response = await axios.post(`${API_BASE_URL}/products/${productId}/chats`, {}, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
+  try {
+    const response = await axios.post(`${API_BASE_URL}/products/${productId}/chats`, {}, {
+      headers: {
+          Authorization: `Bearer ${accessToken}`  // 공백과 함께 Bearer 토큰을 정확히 설정
+      },
+    });
+      
+      const chatroomId = response.data.chatroom_id;
+      navigate(`/chat/${chatroomId}`);
+  } catch (error) {
+      if (error.response && error.response.status === 401) {
+          // 401 오류가 발생하면 로그인 만료 처리
+          alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+          localStorage.removeItem("access_token");  // 토큰 삭제
+          localStorage.removeItem("refresh_token");  // 리프레시 토큰 삭제 (필요시)
+          // 로그인 페이지로 리다이렉트
+          navigate("/login");
+      } else {
+          console.error("채팅방 생성 실패", error);
+          alert("채팅방을 만들 수 없습니다.");
+      }
+  }
+};
 
-        // 생성된 채팅방 ID 받아오기
-        const chatroomId = response.data.chatroom_id;
 
-        // 해당 채팅방으로 이동
-        navigate(`/chat/${chatroomId}`);
-    } catch (error) {
-        console.error("채팅방 생성 실패", error);
-        alert("채팅방을 만들 수 없습니다.");
-    }
-  };
 
   // ✅ 카테고리 옵션 목록
   const categories = [
