@@ -231,16 +231,28 @@ useEffect(() => {
     }
 };
 
-  
-
-  const goToChatRoom = () => {
+  const goToChatRoom = async (productId) => {
+    const accessToken = localStorage.getItem("access_token"); // localStorage에서 직접 accessToken을 가져옴
     if (!accessToken) {
-      alert("로그인이 필요합니다.");
-      return;
+        alert("로그인이 필요합니다.");
+        return;
     }
-  
-    const chatroomId = 1; // 예제용 채팅방 ID
-    navigate(`/chat/${chatroomId}`);
+
+    try {
+        // 채팅방 생성 요청
+        const response = await axios.post(`${API_BASE_URL}/products/${productId}/chats`, {}, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        // 생성된 채팅방 ID 받아오기
+        const chatroomId = response.data.chatroom_id;
+
+        // 해당 채팅방으로 이동
+        navigate(`/chat/${chatroomId}`);
+    } catch (error) {
+        console.error("채팅방 생성 실패", error);
+        alert("채팅방을 만들 수 없습니다.");
+    }
   };
 
   // ✅ 카테고리 옵션 목록
@@ -297,9 +309,7 @@ useEffect(() => {
             >
               {liked ? "💖 관심 등록" : "🤍 관심 등록"}
             </button>
-            <button className="cta-btn" onClick={goToChatRoom} disabled={!accessToken}>
-  채팅하기
-</button>
+            <button className="cta-btn" onClick={() => goToChatRoom(product.id)} disabled={!accessToken}>채팅하기</button>
           </div>
         </section>
       </div>
