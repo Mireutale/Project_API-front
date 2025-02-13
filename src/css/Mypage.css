@@ -1,5 +1,7 @@
+/* Font 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* 전체 컨테이너 스타일 */
 .mypage-container {
     max-width: 700px;
     margin: 40px auto;
@@ -11,6 +13,7 @@
     color: #333;
 }
 
+/* 페이지 제목 (숨김 처리) */
 .mypage-title {
     display: none;
     text-align: center;
@@ -20,12 +23,14 @@
     margin-bottom: 40px;
 }
 
+/* 프로필 정보 섹션 스타일 */
 .profile-info {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
+/* 프로필 이미지 래퍼 스타일 */
 .profile-image-wrapper-big {
     width: 180px;
     height: 180px;
@@ -37,6 +42,7 @@
     flex-shrink: 0;
 }
 
+/* 프로필 이미지 스타일 */
 .profile-image {
     width: 100%;
     height: 100%;
@@ -48,6 +54,7 @@
     transform: scale(1.1);
 }
 
+/* 프로필 상세 정보 스타일 */
 .profile-details {
     flex: 1;
     max-width: 400px;
@@ -70,6 +77,7 @@
     margin-right: 10px;
 }
 
+/* 로딩 컨테이너 스타일 */
 .loading-container {
     text-align: center;
     font-size: 20px;
@@ -77,16 +85,13 @@
     font-weight: 300;
 }
 
-/* Mypage.css */
-
+/* 프로필 액션 버튼 스타일 */
 .profile-actions {
     display: flex;
     align-items: center;
     margin-top: 20px;
     gap: 10px;
-    /* 버튼 사이 간격 */
     justify-content: flex-end;
-    /* 오른쪽 정렬 */
     margin-right: 20px;
 }
 
@@ -94,39 +99,56 @@
     background-color: #ff7e00;
     color: white;
     padding: 12px 24px;
-    /* 버튼 크기 확대 (내부 여백 증가) */
     border: none;
     border-radius: 8px;
-    /* 둥근 모서리 크기 증가 */
     font-size: 16px;
-    /* 글자 크기 확대 */
     font-weight: bold;
-    /* 글자를 더 두껍게 */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    /* 클릭 시 애니메이션 추가 */
 }
 
 .edit-profile-btn:hover {
     background-color: #e67100;
-    /* 호버 시 색상 변경 */
     transform: scale(1.05);
-    /* 살짝 커지는 효과 */
 }
 
-
-
-.profile-info {
+/* 구매/판매 내역 섹션 스타일 */
+.history-section {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 20px;
 }
 
-.profile-image-wrapper-big {
-    width: 180px;
-    height: 180px;
-    overflow: hidden;
-    border-radius: 50%;
-    border: 5px solid #fff;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+.history-card {
+    width: 48%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    /* 이전 테두리 스타일 유지 */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    /* 그림자 효과 조정 */
+}
+
+.history-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* 호버 시 그림자 효과 조정 */
+}
+
+.history-card h3 {
+    margin-bottom: 10px;
+}
+
+.history-card p {
+    color: #555;
+}
+
+/* 두 카드 사이에 구분선 추가 */
+.selling-card {
+    border-left: 1px solid #eee;
 }

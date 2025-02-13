@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";  // ✅ useNavigate 추가
-import axios from "axios";  
-import "../css/CreatePostPage.css"; 
+import axios from "axios";
+import "../css/CreatePostPage.css";
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState([]); // ✅ File 객체를 저장하는 배열 추가
-  const [categoryId, setCategoryId] = useState(1); 
+  const [categoryId, setCategoryId] = useState(1);
   const maxImages = 5;
-  
+
   const navigate = useNavigate();  // ✅ useNavigate 설정
-  const API_URL = "http://localhost:8000/products";  
+  const API_URL = "http://localhost:8000/products";
 
   // ✅ localStorage에서 토큰 가져오기
-  const accessToken = localStorage.getItem("access_token");  
+  const accessToken = localStorage.getItem("access_token");
   console.log("🛠️ 현재 저장된 토큰:", accessToken);
 
   // ✅ 카테고리 옵션 목록
@@ -54,14 +54,14 @@ const CreatePostPage = () => {
       title,
       price: parseInt(price, 10),
       content,
-      category_id: categoryId,  
+      category_id: categoryId,
     };
 
     try {
       // ✅ 게시글 등록 요청 (토큰 포함)
       const response = await axios.post(API_URL, postData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,  
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
       });
