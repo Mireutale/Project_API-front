@@ -1,12 +1,28 @@
-/* 네비게이션 바 */
 .navbar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  /* 기존 스타일 유지 */
   display: flex;
   justify-content: space-between;
-  /* 좌우 균등 정렬 */
   align-items: center;
   padding: 15px 20px;
   background-color: white;
   border-bottom: 1px solid #ddd;
+}
+
+body {
+  padding-top: 65px;
+  /* 네비게이션 바의 높이에 맞춰 조정 */
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  /* 기존 스타일 유지 */
 }
 
 .navbar-left {
@@ -23,20 +39,24 @@
   width: 80px;
 }
 
-/* 네비게이션 링크들 (가운데 정렬) */
 .nav-links {
   display: flex;
   gap: 15px;
-  /* 링크 간 간격 */
   list-style: none;
   margin: 0 auto;
-  /* 가운데 정렬 */
   font-weight: bold;
 }
 
-.nav-links li {
-  margin-right: 15px;
-  cursor: pointer;
+.nav-links li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-links li a:hover,
+.nav-links li a:visited,
+.nav-links li a:active {
+  color: inherit;
+  text-decoration: none;
 }
 
 .navbar-right {

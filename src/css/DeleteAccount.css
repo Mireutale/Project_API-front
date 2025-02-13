@@ -49,6 +49,7 @@
 /* 버튼 호버 효과 */
 .delete-account-btn:hover {
     background-color: #b71c1c;
+    transform: scale(1.05);
     /* 더 어두운 빨간색 */
 }
 

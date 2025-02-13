@@ -4,7 +4,7 @@
 /* 전체 컨테이너 스타일 */
 .mypage-container {
     max-width: 700px;
-    margin: 40px auto;
+    margin: 10px auto;
     padding: 40px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -151,4 +151,23 @@
 /* 두 카드 사이에 구분선 추가 */
 .selling-card {
     border-left: 1px solid #eee;
+}
+
+.likes-btn {
+    font-size: 35px;
+    padding: 10px 15px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-right: -5px;
+    /* "프로필 수정" 버튼과의 간격을 좁힘 */
+}
+
+.likes-btn:hover {
+    transform: scale(1.1);
+}
+
+.edit-profile-btn {
+    /* 필요에 따라 "프로필 수정" 버튼 스타일 조정 */
 }

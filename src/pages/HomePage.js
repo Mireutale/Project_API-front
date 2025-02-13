@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/HomePage.css";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -84,31 +84,6 @@ const HomePage = () => {
         <button type="submit" className="home-search-button">검색</button>
       </form>
 
-      {/* 🔥 카테고리 선택 드롭다운 추가 */}
-      <div className="category-container">
-        <label htmlFor="category">카테고리: </label>
-        <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
-          <option value="">전체</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* 🔽 정렬 선택 드롭다운 */}
-      <div className="sort-container">
-        <label htmlFor="sort">정렬: </label>
-        <select id="sort" value={sortType} onChange={handleSortChange}>
-          <option value="accuracy">정확도</option>
-          <option value="price_asc">가격 낮은 순</option>
-          <option value="price_desc">가격 높은 순</option>
-          <option value="latest">최신순</option>
-          <option value="likes">좋아요 많은 순</option>
-        </select>
-      </div>
-
       {/* 📜 상품 목록 */}
       <div className="product-list">
         {products.map((product) => (
@@ -133,5 +108,6 @@ const HomePage = () => {
     </div>
   );
 };
+
 
 export default HomePage;
