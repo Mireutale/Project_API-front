@@ -11,8 +11,10 @@ import MyPage from "./pages/MyPage"; // MyPage 컴포넌트 import
 import { AuthProvider } from "./AuthContext"; // AuthContext 추가
 import ProfileEdit from './pages/ProfileEdit';
 import DeleteAccount from './pages/DeleteAccount';
-import MyPurchases from './pages/MyPurchases';
 import MySelling from './pages/MySelling';
+import MyLike from './pages/MyLike';
+import MyBought from "./pages/MyBought";
+import ModifyPostPage from "./pages/ModifyPostPage";
 
 const App = () => {
   return (
@@ -33,9 +35,11 @@ const App = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/edit-profile" element={<ProfileEdit />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
-          <Route path="/my-purchases" element={<MyPurchases />} />
-          <Route path="/my-purchases" element={<MyPurchases />} />
           <Route path="/my-selling" element={<MySelling />} />
+
+          <Route path="/my-likes" element={<MyLike />} />
+          <Route path="/my-bought" element={<MyBought />} />
+          <Route path="/modify-post/:product_id" element={<ModifyPostPage />} />
         </Routes>
       </Router>
     </AuthProvider>

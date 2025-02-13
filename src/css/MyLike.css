@@ -1,5 +1,5 @@
-/* MySelling 페이지 전체 스타일 */
-.myselling-page {
+/* MyLike 페이지 전체 스타일 */
+.mylike-page {
     padding: 40px;
     max-width: 1200px;
     margin: 0 auto;
@@ -52,7 +52,7 @@
 }
 
 /* 자세히 보기 버튼 스타일 */
-.myselling-detail-button {
+.mylike-detail-button {
     display: inline-block;
     padding: 8px 12px;
     background-color: #4CAF50;
@@ -62,7 +62,7 @@
     font-size: 14px;
 }
 
-.myselling-detail-button:hover {
+.mylike-detail-button:hover {
     background-color: #45a049;
 }
 

@@ -86,35 +86,42 @@
 
 
 /* 검색 바 스타일 */
-.search-bar {
+.home-search-bar {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
-.search-input {
-  width: 500px;
-  height: 35px;
+/* 검색 입력 필드 */
+.home-search-input {
+  width: 300px; /* ✅ 입력 필드 크기 조정 */
+  height: 25px;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 5px 0 0 5px; /* ✅ 왼쪽 모서리 둥글게 */
 }
 
-.search-button {
-  margin-left: 10px;
-  padding: 8px 12px;
+/* 검색 버튼 */
+.home-search-button {
+  height: 40px;
+  padding: 8px 16px;
   font-size: 16px;
-  background-color: #ff5722;
+  font-weight: bold;
+  background-color: #ff5722; /* ✅ 버튼 색상 */
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0; /* ✅ 오른쪽 모서리 둥글게 */
+  transition: background-color 0.2s ease-in-out;
 }
 
-.search-button:hover {
+.home-search-button:hover {
   background-color: #e64a19;
 }
+
 
 /* 오른쪽 하단 + 버튼 */
 .floating-add-button {
@@ -143,3 +150,84 @@
   background-color: #e64a19;
   transform: scale(1.1);
 }
+
+/* 정렬 드롭다운 스타일 */
+.sort-container {
+  display: flex;
+  justify-content: flex-end; /* ✅ 우측 정렬 */
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px; /* ✅ 레이블과 드롭다운 간격 조정 */
+  padding-right: 0px; /* ✅ 우측 정렬을 위한 패딩 */
+}
+
+/* 정렬 레이블 스타일 */
+.sort-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 정렬 드롭다운 스타일 */
+.sort-container select {
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* 드롭다운 포커스 효과 */
+.sort-container select:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+/* 정렬 드롭다운 호버 효과 */
+.sort-container select:hover {
+  background-color: #f8f8f8;
+}
+/* 🔥 카테고리 선택 컨테이너 */
+.category-container {
+  display: flex;
+  justify-content: flex-end; /* ✅ 좌측 정렬 */
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px; /* ✅ 레이블과 드롭다운 간격 조정 */
+  padding-left: 20px; /* ✅ 좌측 정렬을 위한 패딩 */
+}
+
+/* 카테고리 레이블 스타일 */
+.category-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 카테고리 선택 드롭다운 */
+.category-container select {
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* 드롭다운 포커스 효과 */
+.category-container select:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+/* 드롭다운 호버 효과 */
+.category-container select:hover {
+  background-color: #f8f8f8;
+}
+
+
+
+
