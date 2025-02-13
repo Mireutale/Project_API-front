@@ -32,7 +32,7 @@ const ChatList = ({ userId, onSelectChatroom }) => {
         <ul className="chat-list">
           {chatrooms.map((room) => (
             <li key={room.id} className="chat-list-item">
-              <button onClick={() => onSelectChatroom(room.id, room.chat_seller, room.chat_buyer)}>
+              <button class="chatroom-list-btn" onClick={() => onSelectChatroom(room.id, room.chat_seller, room.chat_buyer)}>
                 {room.id}번 채팅방 (상품 ID: {room.product_id})
               </button>
             </li>
@@ -169,22 +169,27 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
   };
 
   return (
-    <div>
-      <h2>채팅방 {chatroomId}</h2>
-      <div>
+    <div className="chat-room-container">
+      <h2 className="chat-room-title">채팅방 {chatroomId}</h2>
+
+      <div className="chat-messages">
         {messages.map((msg, index) => (
-          <p key={index}>
+          <p key={index} className={`chat-message ${msg.sender_id === userId ? "me" : "other"}`}>
             <strong>{msg.sender_id === userId ? "나" : `상대방`}</strong>: {msg.content}
           </p>
         ))}
       </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="메시지를 입력하세요"
-      />
-      <button onClick={sendMessage}>전송</button>
+
+      <div className="chat-input-container">
+        <input
+          type="text"
+          className="chat-input"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="메시지를 입력하세요"
+        />
+        <button className="send-button" onClick={sendMessage}>전송</button>
+      </div>
     </div>
   );
 };
@@ -197,6 +202,7 @@ const ChatApp = () => {
   const accessToken = localStorage.getItem("access_token");
   const decodedToken = jwtDecode(accessToken); // access_token 디코딩
   const userId = decodedToken.id; // JWT payload에서 user_id 추출
+
   return (
     <div>
       {selectedChatroom ? (
