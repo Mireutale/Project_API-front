@@ -16,6 +16,7 @@ const ProductDetails = () => {
   const [commentText, setCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [heartCount, setHeartCount] = useState(0);
 
 const storedUserId = localStorage.getItem("user_id");
 const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
@@ -65,12 +66,14 @@ console.log("🎯 현재 로그인된 user_id:", userId);
           params: { user_id: userId },
         });
         setLiked(likeResponse.data.liked);
+        setHeartCount(likeResponse.data.count);
       } catch (error) {
         console.error("❌ 좋아요 상태를 가져오지 못했습니다.", error);
       }
     };
 
     fetchLikeStatus();
+    getHeartCount();
   }, [id, userId]);
 
   // ✅ 이미지 이전/다음 버튼 기능 추가
@@ -189,8 +192,15 @@ useEffect(() => {
       console.error("❌ 댓글을 삭제하지 못했습니다.", error);
     }
   };
-
+  const getHeartCount = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
+        setHeartCount(response.data.product.heart_count);
+    } catch (error) {
+      console.error("좋아요 개수를 가져오지 못했습니다.", error);
+    }};
   const handleLikeToggle = async () => {
+    console.log("🎯 좋아요 토글");
     if (!accessToken) {
         alert("로그인이 필요합니다.");
         return;
@@ -229,6 +239,7 @@ useEffect(() => {
     } catch (error) {
         console.error("❌ 좋아요 변경 실패", error);
     }
+    getHeartCount();
 };
 
   const goToChatRoom = async (productId) => {
@@ -299,7 +310,7 @@ useEffect(() => {
             {product?.price?.toLocaleString() ?? "가격 정보 없음"}원
           </p>
           <div className="meta-info">
-            <p>채팅 2 · 관심 {product.heart_count} · 조회 104</p>
+            <p>채팅 2 · 관심 {heartCount} · 조회 104</p>
           </div>
           <div className="button-section">
             <button 
