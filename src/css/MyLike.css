@@ -1,0 +1,121 @@
+/* MyLike 페이지 전체 스타일 */
+.mylike-page {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 제목 스타일 */
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+}
+
+/* 테이블 스타일 */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 테이블 헤더 스타일 */
+.product-table thead {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+}
+
+.product-table th,
+.product-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 홀수 행 스타일 */
+.product-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* 마지막 행 스타일 */
+.product-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* 자세히 보기 버튼 스타일 */
+.mylike-detail-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.mylike-detail-button:hover {
+    background-color: #45a049;
+}
+
+/* 오른쪽 하단 추가 버튼 스타일 */
+.floating-add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.floating-add-button:hover {
+    background-color: #e64a19;
+}
+
+/* 빈 상태 메시지 스타일 */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #888;
+    font-style: italic;
+}
+
+/* 테이블 레이아웃 수정 */
+.product-table {
+    display: table;
+    width: 100%;
+    height: 300px;
+    /* 테이블의 최소 높이 설정 */
+}
+
+.product-table tbody {
+    display: table-row-group;
+    vertical-align: middle;
+}
+
+.product-table tr.empty-row {
+    display: table-row;
+    height: 100%;
+}
+
+.product-table td.empty-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
