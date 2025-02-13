@@ -84,6 +84,36 @@ const HomePage = () => {
         <button type="submit" className="home-search-button">검색</button>
       </form>
 
+      {/* 🔥 카테고리 & 정렬 컨테이너 (한 줄 배치) */}
+      <div className="filter-container">
+        <div className="category-sort-wrapper">
+          {/* 🔥 카테고리 선택 */}
+          <div className="category-container">
+            <label htmlFor="category">카테고리: </label>
+            <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">전체</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 🔽 정렬 선택 */}
+          <div className="sort-container">
+            <label htmlFor="sort">정렬: </label>
+            <select id="sort" value={sortType} onChange={handleSortChange}>
+              <option value="accuracy">정확도</option>
+              <option value="price_asc">가격 낮은 순</option>
+              <option value="price_desc">가격 높은 순</option>
+              <option value="latest">최신순</option>
+              <option value="likes">좋아요 많은 순</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* 📜 상품 목록 */}
       <div className="product-list">
         {products.map((product) => (
@@ -108,6 +138,5 @@ const HomePage = () => {
     </div>
   );
 };
-
 
 export default HomePage;

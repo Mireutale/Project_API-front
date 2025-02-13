@@ -167,7 +167,3 @@
 .likes-btn:hover {
     transform: scale(1.1);
 }
-
-.edit-profile-btn {
-    /* 필요에 따라 "프로필 수정" 버튼 스타일 조정 */
-}
