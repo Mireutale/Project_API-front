@@ -1,16 +1,90 @@
-.myselling-container {
-    max-width: 800px;
+/* MySelling 페이지 전체 스타일 */
+.myselling-page {
+    padding: 40px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
 }
 
-.selling-list {
-    list-style: none;
-    padding: 0;
+/* 제목 스타일 */
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
 }
 
-.selling-item {
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    padding: 10px;
+/* 테이블 스타일 */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 테이블 헤더 스타일 */
+.product-table thead {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+}
+
+.product-table th,
+.product-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 홀수 행 스타일 */
+.product-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* 마지막 행 스타일 */
+.product-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* 자세히 보기 버튼 스타일 */
+.myselling-detail-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.myselling-detail-button:hover {
+    background-color: #45a049;
+}
+
+/* 오른쪽 하단 추가 버튼 스타일 */
+.floating-add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.floating-add-button:hover {
+    background-color: #e64a19;
 }
