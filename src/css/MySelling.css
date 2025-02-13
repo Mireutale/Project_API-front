@@ -1,0 +1,16 @@
+.myselling-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.selling-list {
+    list-style: none;
+    padding: 0;
+}
+
+.selling-item {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+}
