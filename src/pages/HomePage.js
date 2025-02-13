@@ -56,15 +56,15 @@ const HomePage = () => {
       <h1 className="title">중고거래 인기매물</h1>
 
       {/* 🔍 검색 입력 필드 추가 */}
-      <form className="search-bar" onSubmit={handleSearchSubmit}>
+      <form className="home-search-bar" onSubmit={handleSearchSubmit}>
         <input
           type="text"
           placeholder="상품 검색..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="search-input"
+          className="home-search-input"
         />
-        <button type="submit" className="search-button">검색</button>
+        <button type="submit" className="home-search-button">검색</button>
       </form>
 
       <div className="product-list">
