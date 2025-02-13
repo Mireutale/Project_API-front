@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/HomePage.css"; // CSS 파일 연결
+import "../css/HomePage.css";
 
 const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
-  const navigate = useNavigate(); // ✅ 페이지 이동 함수 추가
+  const [categories, setCategories] = useState([]); // 🔥 카테고리 목록
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortType, setSortType] = useState("accuracy"); // 기본 정렬: 정확도
+  const [selectedCategory, setSelectedCategory] = useState(""); // 🔥 선택한 카테고리
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
-  }, []); // 초기 로딩 시 데이터 가져오기
+    fetchCategories(); // 🔥 카테고리 목록 불러오기
+  }, [sortType, selectedCategory]); // 정렬 또는 카테고리 변경 시 API 호출
 
-  // ✅ 상품 목록 API 요청 (검색어 포함)
   const fetchProducts = async (query = "") => {
     try {
       const response = await axios.get(`${API_BASE_URL}/products`, {
-        params: { q: query }, // 쿼리 파라미터 추가
+        params: { q: query, sort_type: sortType, category_id: selectedCategory || null },
       });
 
       const fetchedProducts = response.data.map((item) => ({
         id: item.product.id,
         title: item.product.title,
         price: item.product.price.toLocaleString() + "원",
-        image: item.productImages.length > 0
-          ? `${API_BASE_URL}/uploads/${item.productImages[0].image_URI}`
-          : `${API_BASE_URL}/uploads/default.png`, // 기본 이미지
+        image: item.productImages.length > 0 
+          ? `${API_BASE_URL}/uploads/${item.productImages[0].image_URI}` 
+          : `${API_BASE_URL}/uploads/default.png`,
       }));
       setProducts(fetchedProducts);
     } catch (error) {
@@ -35,27 +38,41 @@ const HomePage = () => {
     }
   };
 
-  // ✅ 검색어 변경 시 상태 업데이트
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("❌ 카테고리를 불러오지 못했습니다.", error);
+    }
+  };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // ✅ 검색 실행 (Enter 키 또는 버튼 클릭 시)
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    fetchProducts(searchTerm); // 검색어를 포함하여 API 요청
+    fetchProducts(searchTerm);
   };
 
-  // ✅ 게시물 작성 페이지로 이동하는 함수
+  const handleSortChange = (event) => {
+    setSortType(event.target.value);
+  };
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
   const handleCreatePost = () => {
-    navigate("/create-post"); // `/create-post` 경로로 이동
+    navigate("/create-post"); // 게시물 작성 페이지로 이동
   };
 
   return (
     <div className="homepage">
       <h1 className="title">중고거래 인기매물</h1>
 
-      {/* 🔍 검색 입력 필드 추가 */}
+      {/* 🔍 검색 필드 */}
       <form className="home-search-bar" onSubmit={handleSearchSubmit}>
         <input
           type="text"
@@ -67,13 +84,43 @@ const HomePage = () => {
         <button type="submit" className="home-search-button">검색</button>
       </form>
 
+      {/* 🔥 카테고리 & 정렬 컨테이너 (한 줄 배치) */}
+      <div className="filter-container">
+        <div className="category-sort-wrapper">
+          {/* 🔥 카테고리 선택 */}
+          <div className="category-container">
+            <label htmlFor="category">카테고리: </label>
+            <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">전체</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 🔽 정렬 선택 */}
+          <div className="sort-container">
+            <label htmlFor="sort">정렬: </label>
+            <select id="sort" value={sortType} onChange={handleSortChange}>
+              <option value="accuracy">정확도</option>
+              <option value="price_asc">가격 낮은 순</option>
+              <option value="price_desc">가격 높은 순</option>
+              <option value="latest">최신순</option>
+              <option value="likes">좋아요 많은 순</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* 📜 상품 목록 */}
       <div className="product-list">
         {products.map((product) => (
-          <div
-            key={product.id}
+          <div 
+            key={product.id} 
             className="product-card"
-            onClick={() => navigate(`/product/${product.id}`)} // ✅ 카드 클릭 시 상세 페이지 이동
-            style={{ cursor: "pointer" }} // ✅ 마우스 오버 시 클릭 가능하게 변경
+            onClick={() => navigate(`/product/${product.id}`)}
           >
             <img src={product.image} alt={product.title} className="product-image" />
             <div className="product-info">

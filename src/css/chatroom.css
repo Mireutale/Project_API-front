@@ -1,44 +1,47 @@
-.chatroom {
-    width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
-  
-  .messages {
-    max-height: 400px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-    padding-right: 10px;
-  }
-  
-  .message {
-    padding: 5px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .input-area {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  input {
-    width: 80%;
-    padding: 5px;
-  }
-  
-  button {
-    width: 15%;
-    padding: 5px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+/* 채팅 목록 컨테이너 */
+.chat-list-container {
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 채팅방 목록 제목 */
+.chat-list-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* 채팅방 목록 */
+.chat-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* 개별 채팅방 버튼 */
+.chat-list-item {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.chat-list-item:hover {
+  background-color: #ffeb3b;
+}
+
+/* 빈 채팅방 메시지 */
+.no-chatrooms {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+}

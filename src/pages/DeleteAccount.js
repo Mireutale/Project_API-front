@@ -19,7 +19,6 @@ const DeleteAccount = () => {
                 await axios.delete('http://127.0.0.1:8000/users/profile', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-
                 logout(); // 로그아웃 처리
                 localStorage.removeItem('access_token'); // 토큰 제거
                 navigate('/'); // 홈페이지로 이동

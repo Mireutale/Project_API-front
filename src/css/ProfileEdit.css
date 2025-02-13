@@ -1,6 +1,4 @@
-/* ProfileEdit.css */
-
-/* 전체 컨테이너 스타일 */
+/* 프로필 수정 페이지 전체 스타일 */
 .profile-edit-container {
     max-width: 500px;
     margin: 50px auto;
@@ -12,26 +10,26 @@
 }
 
 /* 제목 스타일 */
-.profile-edit-container h2 {
+.profile-title {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
     font-size: 24px;
 }
 
-/* 폼 요소 스타일 */
-form {
+/* 폼 스타일 */
+.profile-form {
     display: flex;
     flex-direction: column;
 }
 
 /* 각 입력 필드와 레이블 컨테이너 */
-form div {
+.profile-form-group {
     margin-bottom: 15px;
 }
 
 /* 레이블 스타일 */
-form label {
+.profile-form-group label {
     display: block;
     font-size: 14px;
     font-weight: bold;
@@ -40,9 +38,7 @@ form label {
 }
 
 /* 입력 필드 스타일 */
-form input[type="text"],
-form input[type="email"],
-form input[type="password"] {
+.profile-input {
     width: 100%;
     padding: 10px;
     font-size: 14px;
@@ -52,19 +48,16 @@ form input[type="password"] {
 }
 
 /* 입력 필드 포커스 시 스타일 */
-form input[type="text"]:focus,
-form input[type="email"]:focus,
-form input[type="password"]:focus {
+.profile-input:focus {
     border-color: #007bff;
     outline: none;
 }
 
 /* 버튼 스타일 */
-button[type="submit"] {
+.profile-submit-button {
     width: 100%;
     padding: 10px;
     background-color: #FF6F0F;
-    /* 당근마켓 주황색 */
     color: white;
     border: none;
     border-radius: 5px;
@@ -73,15 +66,13 @@ button[type="submit"] {
 }
 
 /* 버튼 호버 효과 */
-button[type="submit"]:hover {
-    background-color: #FF6F0F;
-    /* 살짝 어두운 주황색 */
+.profile-submit-button:hover {
+    background-color: #e64a19;
 }
 
 /* 버튼 활성화 상태 */
-button[type="submit"]:active {
-    background-color: #FF6F0F;
-    /* 더 어두운 주황색 */
+.profile-submit-button:active {
+    background-color: #d8540f;
 }
 
 /* 반응형 디자인 */
@@ -90,40 +81,29 @@ button[type="submit"]:active {
         padding: 15px;
         margin-top: 30px;
         box-shadow: none;
-        /* 모바일에서는 그림자 제거 */
         background-color: #fff;
-        /* 배경색 조정 */
         border-radius: 0;
-        /* 둥근 모서리 제거 */
     }
 
-    form label {
+    .profile-form-group label {
         font-size: 13px;
-        /* 폰트 크기 축소 */
     }
 
-    form input,
-    button[type="submit"] {
+    .profile-input,
+    .profile-submit-button {
         font-size: 14px;
-        /* 입력 필드와 버튼 크기 조정 */
         padding: 8px;
-        /* 여백 축소 */
     }
 }
 
-
-/* ProfileEdit.css */
-
 /* 선택 항목의 괄호 스타일 */
-form label .optional {
+.profile-optional {
     color: #888;
-    /* 회색 */
     font-style: italic;
 }
 
 /* 필수 항목의 괄호 스타일 */
-form label .required {
+.profile-required {
     color: #e81b1b;
-    /* 빨간색 */
     font-style: italic;
 }

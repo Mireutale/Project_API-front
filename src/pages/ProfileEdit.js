@@ -17,7 +17,6 @@ const ProfileEdit = () => {
         e.preventDefault();
 
         const accessToken = localStorage.getItem('access_token');
-
         if (!accessToken) {
             alert('인증 토큰이 없습니다.');
             return;
@@ -58,38 +57,42 @@ const ProfileEdit = () => {
 
     return (
         <div className="profile-edit-container">
-            <h2>프로필 수정</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>아이디 <span className="optional">(선택)</span>:</label>
+            <h2 className="profile-title">프로필 수정</h2>
+            <form className="profile-form" onSubmit={handleSubmit}>
+                <div className="profile-form-group">
+                    <label>아이디 <span className="profile-optional">(선택)</span>:</label>
                     <input
                         type="text"
                         value={loginId}
                         onChange={(e) => setLoginId(e.target.value)}
+                        className="profile-input"
                     />
                 </div>
-                <div>
-                    <label>이름 <span className="optional">(선택)</span>:</label>
+                <div className="profile-form-group">
+                    <label>이름 <span className="profile-optional">(선택)</span>:</label>
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        className="profile-input"
                     />
                 </div>
-                <div>
-                    <label>이메일 <span className="optional">(선택)</span>:</label>
+                <div className="profile-form-group">
+                    <label>이메일 <span className="profile-optional">(선택)</span>:</label>
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="profile-input"
                     />
                 </div>
-                <div>
-                    <label>기존 비밀번호 <span className="required">*(필수)</span>:</label>
+                <div className="profile-form-group">
+                    <label>기존 비밀번호 <span className="profile-required">*(필수)</span>:</label>
                     <input
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="profile-input"
                     />
                 </div>
                 <div>
@@ -98,10 +101,10 @@ const ProfileEdit = () => {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="profile-input"
                     />
                 </div>
-
-                <button type="submit">수정 완료</button>
+                <button type="submit" className="profile-submit-button">수정 완료</button>
             </form>
         </div>
     );

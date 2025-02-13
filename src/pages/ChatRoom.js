@@ -1,23 +1,37 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import  "../css/chatroom.css";
 
 // 채팅방 목록 컴포넌트
 const ChatList = ({ userId, onSelectChatroom }) => {
   const [chatrooms, setChatrooms] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/chats?user_id=${userId}`)
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    fetch("http://localhost:8000/chats", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+    })
       .then((res) => res.json())
-      .then((data) => setChatrooms(data.chatrooms || [])) // data.chatrooms가 undefined일 경우 빈 배열로 처리
+      .then((data) => setChatrooms(data.chatrooms || []))
       .catch((err) => console.error("채팅방 목록 불러오기 실패:", err));
   }, [userId]);
 
   return (
-    <div>
-      <h2>채팅 목록</h2>
+    <div className="chat-list-container">
+      <h2 className="chat-list-title">채팅 목록</h2>
       {chatrooms.length > 0 ? (
-        <ul>
+        <ul className="chat-list">
           {chatrooms.map((room) => (
-            <li key={room.id}>
+            <li key={room.id} className="chat-list-item">
               <button onClick={() => onSelectChatroom(room.id, room.chat_seller, room.chat_buyer)}>
                 {room.id}번 채팅방 (상품 ID: {room.product_id})
               </button>
@@ -25,10 +39,10 @@ const ChatList = ({ userId, onSelectChatroom }) => {
           ))}
         </ul>
       ) : (
-        <p>참여한 채팅방이 없습니다.</p>
+        <p className="no-chatrooms">참여한 채팅방이 없습니다.</p>
       )}
     </div>
-  );
+  );  
 };
 
 // 채팅방 컴포넌트
@@ -36,35 +50,117 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
+  const [socketStatus, setSocketStatus] = useState("connecting");
+  const [pendingMessages, setPendingMessages] = useState([]);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/chats/${chatroomId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setMessages(response.data.messages || []);
+      } catch (error) {
+        console.error("메시지 불러오기 실패", error);
+      }
+    };
+
+    fetchMessages();
+
     // WebSocket 연결
-    const ws = new WebSocket(`ws://localhost:8000/ws/${chatroomId}/${userId}`);
+    const ws = new WebSocket(`http://localhost:8000/chats/${chatroomId}/messages`);
+    
+    ws.onopen = () => {
+      setSocketStatus("open");
+      console.log("WebSocket 연결 성공");
+
+      // 연결된 상태에서 대기 중인 메시지를 전송
+      pendingMessages.forEach((msg) => {
+        ws.send(JSON.stringify(msg));
+      });
+      setPendingMessages([]); // 대기 중인 메시지 초기화
+    };
+
     ws.onmessage = (event) => {
       try {
-        const messageData = JSON.parse(event.data); // 서버에서 온 메시지가 JSON 형태라고 가정
-        setMessages((prev) => [...prev, messageData]); // 메시지를 추가
+        const messageData = JSON.parse(event.data);
+        setMessages((prev) => [...prev, messageData]);
       } catch (error) {
         console.error("WebSocket 메시지 처리 오류:", error);
       }
     };
-    ws.onclose = () => console.log("WebSocket 연결 종료");
+
+    ws.onerror = (error) => {
+      console.error("WebSocket 에러:", error);
+    };
+
+    ws.onclose = () => {
+      setSocketStatus("closed");
+      console.log("WebSocket 연결 종료");
+    };
 
     setSocket(ws);
 
-    return () => ws.close();
-  }, [chatroomId, userId]);
+    // WebSocket 연결 상태를 계속 확인하는 setInterval
+    const checkConnection = setInterval(() => {
+      if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) {
+        console.log("WebSocket이 끊어졌습니다. 재연결 시도 중...");
+        // 재연결을 위한 코드 추가
+        setSocket(new WebSocket(`http://localhost:8000/chats/${chatroomId}/messages`));
+      }
+    }, 5000); // 5초마다 연결 상태 체크
 
-  const sendMessage = () => {
-    if (socket && message.trim()) {
+    return () => {
+      clearInterval(checkConnection); // 컴포넌트 언마운트 시 setInterval 제거
+      ws.close(); // WebSocket 연결 종료
+    };
+  }, [chatroomId, userId, pendingMessages]);
+
+  const sendMessage = async () => {
+    if (message.trim()) {
+      const accessToken = localStorage.getItem("access_token");
       const msgData = {
+        id: 0,
+        chatroom_id: chatroomId,
         sender_id: userId,
-        receiver_id: userId === sellerId ? buyerId : sellerId, // 상대방에게 보낼 메시지
+        receiver_id: userId === sellerId ? buyerId : sellerId,
         content: message,
+        sent_at: new Date().toISOString(),
       };
-      socket.send(JSON.stringify(msgData)); // 서버로 메시지 전송
-      setMessages((prev) => [...prev, msgData]); // 본인 메시지도 화면에 표시
-      setMessage(""); // 입력 필드 초기화
+
+      try {
+        const response = await axios.post(
+          `http://localhost:8000/chats/${chatroomId}/messages`,
+          msgData,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setMessages((prev) => [...prev, response.data]);
+        setMessage("");
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify(msgData)); // 웹소켓으로 메시지 전송
+        } else {
+          // 웹소켓 연결되지 않으면 메시지를 대기 중으로 저장
+          setPendingMessages((prev) => [...prev, msgData]);
+          console.log("WebSocket이 연결되지 않았습니다. 메시지가 대기 중입니다.");
+        }
+      } catch (error) {
+        console.error("메시지 전송 실패", error);
+      }
     }
   };
 
@@ -74,7 +170,7 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
       <div>
         {messages.map((msg, index) => (
           <p key={index}>
-            <strong>{msg.sender_id === userId ? "나" : `유저 ${msg.sender_id}`}</strong>: {msg.content}
+            <strong>{msg.sender_id === userId ? "나" : `상대방`}</strong>: {msg.content}
           </p>
         ))}
       </div>
@@ -90,11 +186,13 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
 };
 
 // 전체 채팅 애플리케이션 컴포넌트
-const ChatApp = ({ userId }) => {
+const ChatApp = () => {
   const [selectedChatroom, setSelectedChatroom] = useState(null);
   const [sellerId, setSellerId] = useState(null);
   const [buyerId, setBuyerId] = useState(null);
-
+  const accessToken = localStorage.getItem("access_token");
+  const decodedToken = jwtDecode(accessToken); // access_token 디코딩
+  const userId = decodedToken.id; // JWT payload에서 user_id 추출
   return (
     <div>
       {selectedChatroom ? (
