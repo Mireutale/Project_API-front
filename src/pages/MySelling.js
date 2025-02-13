@@ -68,39 +68,38 @@ const MySelling = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.length === 0 ? (
-                        <tr className="empty-row">
-                            <td colSpan="6" className="empty-cell">
-                                <div className="empty-state">판매중인 상품이 없습니다.</div>
-                            </td>
-                        </tr>
-                    ) : (
-                        products.map((product, index) => (
-                            <tr key={product.id}>
-                                <td>{index + 1}</td>
-                                <td>{product.title}</td>
-                                <td>{product.price}</td>
-                                <td>
-                                    <Link to={`/product/${product.id}`} className="myselling-detail-button">
-                                        자세히 보기
-                                    </Link>
-                                    <button className="myselling-modify-button" onClick={() => handleModifyPost(product.id)}>수정</button>
-                                    <button className="myselling-delete-button" onClick={() => handleDeletePost(product.id)}>삭제</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => handleEdit(product.id)} className="myselling-edit-button">
-                                        수정
-                                    </button>
-                                </td>
-                                <td>
-                                    <button onClick={() => handleDelete(product.id)} className="myselling-delete-button">
-                                        삭제
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
+    {products.length === 0 ? (
+        <tr className="empty-row">
+            <td colSpan="6" className="empty-cell">
+                <div className="empty-state">판매중인 상품이 없습니다.</div>
+            </td>
+        </tr>
+    ) : (
+        products.map((product, index) => (
+            <tr key={product.id}>
+                <td>{index + 1}</td>
+                <td>{product.title}</td>
+                <td>{product.price}</td>
+                <td>
+                    <Link to={`/product/${product.id}`} className="myselling-detail-button">
+                        자세히 보기
+                    </Link>
+                </td>
+                <td>
+                    <button onClick={() => handleModifyPost(product.id)} className="myselling-edit-button">
+                        수정
+                    </button>
+                </td>
+                <td>
+                    <button onClick={() => handleDeletePost(product.id)} className="myselling-delete-button">
+                        삭제
+                    </button>
+                </td>
+            </tr>
+        ))
+    )}
+</tbody>
+
             </table>
 
             <button className="floating-add-button" onClick={handleCreatePost}>
