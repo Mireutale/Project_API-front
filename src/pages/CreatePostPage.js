@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";  // ✅ useNavigate 추가
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/CreatePostPage.css";
 
@@ -7,36 +7,42 @@ const CreatePostPage = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [content, setContent] = useState("");
-  const [imageFiles, setImageFiles] = useState([]); // ✅ File 객체를 저장하는 배열 추가
-  const [categoryId, setCategoryId] = useState(1);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [categoryId, setCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);  // ✅ 카테고리 목록 상태 추가
   const maxImages = 5;
 
-  const navigate = useNavigate();  // ✅ useNavigate 설정
-  const API_URL = "http://localhost:8000/products";
-
-  // ✅ localStorage에서 토큰 가져오기
+  const navigate = useNavigate();
+  const API_URL = "http://localhost:8000";
   const accessToken = localStorage.getItem("access_token");
+
   console.log("🛠️ 현재 저장된 토큰:", accessToken);
 
-  // ✅ 카테고리 옵션 목록
-  const categories = [
-    { id: 1, name: "전자기기" },
-    { id: 2, name: "의류" },
-    { id: 3, name: "가구" },
-    { id: 4, name: "도서" },
-    { id: 5, name: "기타" },
-  ];
+  // ✅ 카테고리 목록을 FastAPI에서 가져오기
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/categories/`);
+        setCategories(response.data);
+        if (response.data.length > 0) {
+          setCategoryId(response.data[0].id); // 기본값 설정
+        }
+      } catch (error) {
+        console.error("카테고리 불러오기 실패:", error);
+      }
+    };
 
-  // ✅ 이미지 업로드 핸들러 (File 객체 저장)
+    fetchCategories();
+  }, []);
+
+  // ✅ 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-
     if (files.length + imageFiles.length > maxImages) {
       alert(`이미지는 최대 ${maxImages}개까지 업로드할 수 있습니다.`);
       return;
     }
-
-    setImageFiles([...imageFiles, ...files]); // ✅ File 객체 저장
+    setImageFiles([...imageFiles, ...files]);
   };
 
   // ✅ 이미지 삭제 핸들러
@@ -44,8 +50,9 @@ const CreatePostPage = () => {
     setImageFiles(imageFiles.filter((_, i) => i !== index));
   };
 
-  const isFormValid = title && price && content;
+  const isFormValid = title && price && content && categoryId;
 
+  // ✅ 게시글 등록 요청
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -58,8 +65,7 @@ const CreatePostPage = () => {
     };
 
     try {
-      // ✅ 게시글 등록 요청 (토큰 포함)
-      const response = await axios.post(API_URL, postData, {
+      const response = await axios.post(`${API_URL}/products`, postData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -69,23 +75,23 @@ const CreatePostPage = () => {
       console.log("게시글 등록 성공:", response.data);
       alert("게시글이 등록되었습니다!");
 
-      // ✅ 이미지 업로드 (FormData에 File 객체 추가)
+      // ✅ 이미지 업로드
       if (imageFiles.length > 0) {
-        imageFiles.forEach((file) => {
+        const productId = response.data.product.id;
+        imageFiles.forEach(async (file) => {
           let formData = new FormData();
           formData.append("image", file);
-          axios.post(`${API_URL}/${response.data.product.id}/image`, formData, {
+          await axios.post(`${API_URL}/products/${productId}/image`, formData, {
             headers: {
-              Authorization: `Bearer ${accessToken}`,  
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "multipart/form-data",
             },
           });
-          console.log("이미지 업로드 완료");
-        });        
+        });
+        console.log("이미지 업로드 완료");
       }
 
-      // ✅ 홈 페이지로 이동
-      navigate("/");  // ✅ window.location.href 대신 SPA 방식 유지
+      navigate("/");
     } catch (error) {
       console.error("게시글 등록 실패:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
@@ -135,11 +141,15 @@ const CreatePostPage = () => {
           className="input-field"
         />
 
-        {/* ✅ 카테고리 선택 */}
+        {/* ✅ 동적으로 불러온 카테고리 목록 */}
         <select value={categoryId} onChange={(e) => setCategoryId(parseInt(e.target.value, 10))} className="input-field">
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>{category.name}</option>
-          ))}
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))
+          ) : (
+            <option value="">카테고리를 불러오는 중...</option>
+          )}
         </select>
 
         <textarea

@@ -189,5 +189,42 @@
 .sort-container select:hover {
   background-color: #f8f8f8;
 }
+/* 🔥 카테고리 선택 컨테이너 */
+.category-container {
+  display: flex;
+  justify-content: flex-start; /* ✅ 좌측 정렬 */
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px; /* ✅ 레이블과 드롭다운 간격 조정 */
+  padding-left: 20px; /* ✅ 좌측 정렬을 위한 패딩 */
+}
 
+/* 카테고리 레이블 스타일 */
+.category-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 카테고리 선택 드롭다운 */
+.category-container select {
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* 드롭다운 포커스 효과 */
+.category-container select:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+/* 드롭다운 호버 효과 */
+.category-container select:hover {
+  background-color: #f8f8f8;
+}
 

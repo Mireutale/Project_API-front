@@ -1,6 +1,5 @@
-import React, { useState, useEffect, use } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";  // ✅ useNavigate 추가
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/CreatePostPage.css";
 
@@ -9,56 +8,33 @@ const ModifyPostPage = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [content, setContent] = useState("");
-  const [imageFiles, setImageFiles] = useState([]); // ✅ File 객체를 저장하는 배열 추가
+  const [imageFiles, setImageFiles] = useState([]);
   const [imageIDs, setImageIDs] = useState([]);
-  const [categoryId, setCategoryId] = useState(1);
+  const [categoryId, setCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]); // ✅ 카테고리 목록 상태 추가
   const maxImages = 5;
 
-
-  const navigate = useNavigate();  // ✅ useNavigate 설정
+  const navigate = useNavigate();
   const API_URL = "http://localhost:8000";
-
-  // ✅ localStorage에서 토큰 가져오기
   const accessToken = localStorage.getItem("access_token");
+
   console.log("🛠️ 현재 저장된 토큰:", accessToken);
 
-  // ✅ 카테고리 옵션 목록
-  const categories = [
-    { id: 1, name: "전자기기" },
-    { id: 2, name: "의류" },
-    { id: 3, name: "가구" },
-    { id: 4, name: "도서" },
-    { id: 5, name: "기타" },
-  ];
+  // ✅ 카테고리 목록을 FastAPI에서 가져오기
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/categories/`);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("카테고리 불러오기 실패:", error);
+      }
+    };
 
-  // ✅ 이미지 업로드 핸들러 (File 객체 저장)
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files);
+    fetchCategories();
+  }, []);
 
-    if (files.length + imageFiles.length > maxImages) {
-      alert(`이미지는 최대 ${maxImages}개까지 업로드할 수 있습니다.`);
-      return;
-    }
-    setImageFiles([...imageFiles, ...files]); // ✅ File 객체 저장
-    files.forEach((file) => {
-        // image_id 설정
-        uploadImage(file).then((productImage) => {
-            console.log(productImage);
-            setImageIDs((prev) => [...prev, productImage.id]);
-        });
-    });
-  };
-
-  // ✅ 이미지 삭제 핸들러
-  const handleRemoveImage = async (index) => {
-    const image_id = imageIDs[index];
-    await deleteImage(image_id);
-    setImageFiles(imageFiles.filter((_, i) => i !== index));
-    setImageIDs(imageIDs.filter((_, i) => i !== index));
-  };
-
-  const isFormValid = title && price && content;
-
+  // ✅ 기존 상품 데이터 불러오기
   const fetchProduct = async () => {
     try {
       const response = await axios.get(`${API_URL}/products/${product_id}`);
@@ -71,31 +47,57 @@ const ModifyPostPage = () => {
       setCategoryId(product.category_id);
       fetchImageFiles(productImages);
     } catch (error) {
-        console.error("상품 정보 불러오기 실패:", error);
+      console.error("상품 정보 불러오기 실패:", error);
     }
   };
+
   const fetchImageFiles = async (productImages) => {
     try {
       const imageFiles = await Promise.all(
         productImages.map(async (productImage) => {
           const imageUrl = `${API_URL}/uploads/${productImage.image_URI}`;
           const response = await fetch(imageUrl);
-  
           if (!response.ok) throw new Error("이미지 로드 실패");
-  
+
           const blob = await response.blob();
           setImageIDs((prev) => [...prev, productImage.id]);
-        console.log("살려주세요");
-          console.log(imageIDs);
           return new File([blob], productImage.image_URI.split('/').pop(), { type: blob.type });
         })
       );
-  
+
       setImageFiles(imageFiles);
     } catch (error) {
       console.error("이미지 파일 변환 중 오류 발생:", error);
     }
   };
+
+  useEffect(() => {
+    fetchProduct();
+  }, [product_id]);
+
+  // ✅ 이미지 업로드 핸들러
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length + imageFiles.length > maxImages) {
+      alert(`이미지는 최대 ${maxImages}개까지 업로드할 수 있습니다.`);
+      return;
+    }
+    setImageFiles([...imageFiles, ...files]);
+    files.forEach((file) => {
+      uploadImage(file).then((productImage) => {
+        setImageIDs((prev) => [...prev, productImage.id]);
+      });
+    });
+  };
+
+  // ✅ 이미지 삭제 핸들러
+  const handleRemoveImage = async (index) => {
+    const image_id = imageIDs[index];
+    await deleteImage(image_id);
+    setImageFiles(imageFiles.filter((_, i) => i !== index));
+    setImageIDs(imageIDs.filter((_, i) => i !== index));
+  };
+
   const uploadImage = async (file) => {
     try {
       let formData = new FormData();
@@ -111,23 +113,24 @@ const ModifyPostPage = () => {
     } catch (error) {
       console.error("이미지 업로드 실패:", error);
     }
-  }
+  };
+
   const deleteImage = async (image_id) => {
     try {
       await axios.delete(`${API_URL}/products/${product_id}/image/${image_id}`, {
         headers: {
-            Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
-        });
-        console.log("이미지 삭제 성공");
+      });
+      console.log("이미지 삭제 성공");
     } catch (error) {
-        console.error("이미지 삭제 실패:", error);
+      console.error("이미지 삭제 실패:", error);
     }
   };
-  useEffect(() => {
-    fetchProduct();
-  }, [product_id]);
 
+  const isFormValid = title && price && content && categoryId;
+
+  // ✅ 상품 수정 요청
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -140,7 +143,6 @@ const ModifyPostPage = () => {
     };
 
     try {
-      // ✅ 게시글 등록 요청 (토큰 포함)
       const response = await axios.put(`${API_URL}/products/${product_id}`, postData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -148,20 +150,19 @@ const ModifyPostPage = () => {
         },
       });
 
-      console.log("게시글 등록 성공:", response.data);
-      alert("게시글이 수정정되었습니다!");
+      console.log("게시글 수정 성공:", response.data);
+      alert("게시글이 수정되었습니다!");
 
-      // ✅ 홈 페이지로 이동
-      navigate(`/product/${product_id}`);  // ✅ window.location.href 대신 SPA 방식 유지
+      navigate(`/product/${product_id}`);
     } catch (error) {
-      console.error("게시글 등록 실패:", error);
-      alert("게시글 등록 중 오류가 발생했습니다.");
+      console.error("게시글 수정 실패:", error);
+      alert("게시글 수정 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div className="create-post-container">
-      <h1 className="title">수정</h1>
+      <h1 className="title">게시글 수정</h1>
 
       <div className="image-upload-container">
         <label className="image-box">
@@ -202,11 +203,15 @@ const ModifyPostPage = () => {
           className="input-field"
         />
 
-        {/* ✅ 카테고리 선택 */}
+        {/* ✅ 동적으로 불러온 카테고리 목록 */}
         <select value={categoryId} onChange={(e) => setCategoryId(parseInt(e.target.value, 10))} className="input-field">
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>{category.name}</option>
-          ))}
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))
+          ) : (
+            <option value="">카테고리를 불러오는 중...</option>
+          )}
         </select>
 
         <textarea
@@ -217,7 +222,7 @@ const ModifyPostPage = () => {
         />
 
         <button type="submit" className="submit-button" disabled={!isFormValid}>
-          등록 하기
+          수정 하기
         </button>
       </form>
     </div>
