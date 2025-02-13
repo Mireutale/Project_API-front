@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/MySelling.css";
+import "../css/MyBought.css";
 
 const API_BASE_URL = "http://localhost:8000";
 
-const MySelling = () => {
+const MyBought = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchMyProducts();
+        fetchMyBoughtProducts();
     }, []);
 
-    const fetchMyProducts = async () => {
+    const fetchMyBoughtProducts = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/users/selling`, {
+            const response = await axios.get(`${API_BASE_URL}/products/purchases/me`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                 },
             });
-            setProducts(response.data.my_selling_list);
+            console.log("API 응답 데이터:", response.data);
+            setProducts(response.data || []);
         } catch (error) {
-            console.error("내가 올린 상품 목록을 불러오지 못했습니다.", error);
+            console.error("내가 구매한 상품 목록을 불러오지 못했습니다.", error);
+            setError("상품 목록을 불러오는 중 오류가 발생했습니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -30,24 +36,29 @@ const MySelling = () => {
         navigate("/create-post");
     };
 
+    if (loading) return <p>로딩 중...</p>;
+    if (error) return <p>{error}</p>;
+
     return (
-        <div className="myselling-page">
-            <h1 className="title">내가 판매중인 상품</h1>
+        <div className="mybought-page">
+            <h1 className="title">내가 구매한 상품</h1>
 
             <table className="product-table">
                 <thead>
                     <tr>
                         <th>번호</th>
-                        <th>제목</th>
+                        <th>상품명</th>
                         <th>가격</th>
+                        <th>판매자</th>
+                        <th>구매일</th>
                         <th>자세히 보기</th>
                     </tr>
                 </thead>
                 <tbody>
                     {products.length === 0 ? (
                         <tr className="empty-row">
-                            <td colSpan="4" className="empty-cell">
-                                <div className="empty-state">판매중인 상품이 없습니다.</div>
+                            <td colSpan="6" className="empty-cell">
+                                <div className="empty-state">구매한 상품이 없습니다.</div>
                             </td>
                         </tr>
                     ) : (
@@ -55,9 +66,11 @@ const MySelling = () => {
                             <tr key={product.id}>
                                 <td>{index + 1}</td>
                                 <td>{product.title}</td>
-                                <td>{product.price}</td>
+                                <td>{product.price ? `${product.price.toLocaleString()}원` : "가격 정보 없음"}</td>
+                                <td>{product.seller_name}</td>
+                                <td>{new Date(product.purchase_date).toLocaleDateString()}</td>
                                 <td>
-                                    <Link to={`/product/${product.id}`} className="myselling-detail-button">
+                                    <Link to={`/product/${product.id}`} className="mybought-detail-button">
                                         자세히 보기
                                     </Link>
                                 </td>
@@ -72,7 +85,6 @@ const MySelling = () => {
             </button>
         </div>
     );
-
 };
 
-export default MySelling;
+export default MyBought;
