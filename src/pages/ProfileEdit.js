@@ -39,7 +39,14 @@ const ProfileEdit = () => {
                 }
             );
 
+            // 새 토큰 저장
+            if (response.data.access_token) {
+                localStorage.setItem('access_token', response.data.access_token);
+            }
+
+            // AuthContext 사용자 정보 갱신
             login(response.data);
+
             alert('프로필 수정이 완료되었습니다.');
             navigate('/mypage');
         } catch (error) {
@@ -88,8 +95,8 @@ const ProfileEdit = () => {
                         className="profile-input"
                     />
                 </div>
-                <div className="profile-form-group">
-                    <label>새 비밀번호 <span className="profile-optional">(선택)</span>:</label>
+                <div>
+                    <label>새 비밀번호 <span className="required">*(필수)</span>:</label>
                     <input
                         type="password"
                         value={password}
