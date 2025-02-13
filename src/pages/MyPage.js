@@ -64,8 +64,8 @@ const MyPage = () => {
             <hr></hr>
             <div className="history-section">
                 <div onClick={handleViewBought} className="history-card purchase-card">
-                    <h3>구매 내역</h3>
-                    <p>지금까지 구매한 상품 목록을 확인하세요.</p>
+                    <h3>구매 대기 내역</h3>
+                    <p>구매를 대기한 상품 목록을 확인하세요.</p>
                 </div>
                 <div onClick={handleViewSelling} className="history-card selling-card">
                     <h3>판매 내역</h3>

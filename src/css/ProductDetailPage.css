@@ -233,3 +233,31 @@
 .comment-buttons .cancel-btn:hover {
   background-color: #555;
 }
+
+.purchase-btn {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.purchase-btn:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.purchase-btn.active {
+  background-color: #FFD700;
+  color: white;
+}
+
+.purchase-btn:focus {
+  outline: none;
+}
+
+.purchase-btn:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
