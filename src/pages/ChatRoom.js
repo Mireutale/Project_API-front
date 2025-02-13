@@ -5,7 +5,7 @@ const ChatList = ({ userId, onSelectChatroom }) => {
   const [chatrooms, setChatrooms] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/chats?user_id=${userId}`)
+    fetch(`http://localhost:8000/chats`)
       .then((res) => res.json())
       .then((data) => setChatrooms(data.chatrooms || [])) // data.chatrooms가 undefined일 경우 빈 배열로 처리
       .catch((err) => console.error("채팅방 목록 불러오기 실패:", err));

@@ -7,70 +7,83 @@
 
 /* 제목 스타일 */
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
 }
 
-/* 상품 목록 그리드 */
+/* 상품 목록 그리드 (반응형) */
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 최소 250px, 자동 조정 */
   gap: 20px;
+  justify-content: center;
 }
 
-/* 상품 카드 스타일 */
+/* 상품 카드 스타일 (높이 조정하여 전체 크기 줄이기) */
 .product-card {
+  width: 100%;
+  height: 450px; /* ✅ 카드 높이 줄이기 */
   border: 1px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.2s ease-in-out;
   background-color: #fff;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
+/* 상품 카드 호버 효과 */
 .product-card:hover {
   transform: translateY(-5px);
 }
 
-/* 상품 이미지 */
+/* 상품 이미지 (✅ 크기 일정하게 유지 & 비율 맞춤) */
 .product-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+  width: 120px; /* ✅ 너비 조정 */
+  height: 120px; /* ✅ 높이 조정 */
+  max-width: 100%; /* ✅ 최대 너비 제한 */
+  max-height: 70%; /* ✅ 최대 높이 제한 */
+  object-fit: cover; /* ✅ 크기에 맞춰 꽉 채우면서 비율 유지 */
+  border-bottom: 1px solid #ddd;
+  background-color: #f8f8f8; /* ✅ 이미지 없을 때 배경 */
+  margin: 0 auto; /* ✅ 가운데 정렬 */
 }
 
-/* 상품 정보 */
+/* 상품 정보 (상품 가격 아래쪽 여백을 최소화하기 위한 조정) */
 .product-info {
-  padding: 15px;
+  padding: 8px;
+  text-align: left;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* ✅ space-between 제거 */
+  font-size: 14px;
 }
 
+/* 상품 이름 */
 .product-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* 상품 가격 (✅ 아래쪽 여백 최소화) */
 .product-price {
   color: #ff5722;
   font-size: 16px;
-  margin-bottom: 15px;
+  font-weight: bold;
+  margin: 2px 0 0 0; /* ✅ 위쪽 여백은 2px, 아래쪽 여백은 0px */
+  padding: 0; /* ✅ 불필요한 padding 제거 */
+  line-height: 1.2; /* ✅ 줄 간격 조정 */
 }
 
-/* 자세히 보기 버튼 */
-.detail-button {
-  display: inline-block;
-  padding: 8px 12px;
-  background-color: #ff5722;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-}
 
-.detail-button:hover {
-  background-color: #e64a19;
-}
 
 /* 검색 바 스타일 */
 .search-bar {
@@ -80,7 +93,8 @@
 }
 
 .search-input {
-  width: 300px;
+  width: 500px;
+  height: 35px;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ddd;
@@ -103,13 +117,10 @@
 }
 
 /* 오른쪽 하단 + 버튼 */
-/* 오른쪽 하단 + 버튼 (살짝 왼쪽 위로 이동) */
 .floating-add-button {
   position: fixed;
   bottom: 40px;
-  /* 기존 20px → 80px으로 위쪽 이동 */
   right: 40px;
-  /* 기존 20px → 80px으로 왼쪽 이동 */
   width: 60px;
   height: 60px;
   background-color: #ff5722;
