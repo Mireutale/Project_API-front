@@ -13,7 +13,7 @@ const CreatePostPage = () => {
   const maxImages = 5;
 
   const navigate = useNavigate();
-  const API_URL = "http://localhost:8000";
+  const API_URL = "http://43.203.243.68";
   const accessToken = localStorage.getItem("access_token");
 
   console.log("🛠️ 현재 저장된 토큰:", accessToken);

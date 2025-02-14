@@ -14,7 +14,7 @@ const ChatList = ({ userId, onSelectChatroom }) => {
       return;
     }
 
-    fetch("http://localhost:8000/chats", {
+    fetch("http://43.203.243.68/chats", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: "application/json",
@@ -62,7 +62,7 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
 
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/chats/${chatroomId}`, {
+        const response = await axios.get(`http://43.203.243.68/chats/${chatroomId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -142,7 +142,7 @@ const ChatRoom = ({ chatroomId, userId, sellerId, buyerId }) => {
 
       try {
         const response = await axios.post(
-          `http://localhost:8000/chats/${chatroomId}/messages`,
+          `http://43.203.243.68/chats/${chatroomId}/messages`,
           msgData,
           {
             headers: {

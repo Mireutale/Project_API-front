@@ -18,7 +18,7 @@ const SignUp = () => {
         setError('');
         try {
             // 백엔드 API 엔드포인트 URL
-            const API_ENDPOINT = 'http://localhost:8000/users/signup';
+            const API_ENDPOINT = 'http://43.203.243.68/users/signup';
 
             // 서버로 회원가입 요청 보내기
             const response = await axios.post(API_ENDPOINT, {

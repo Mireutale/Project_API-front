@@ -17,7 +17,7 @@ const Login = () => {
         setError('');
         
         try {
-            const API_ENDPOINT = 'http://localhost:8000/users/token';
+            const API_ENDPOINT = 'http://43.203.243.68/users/token';
         
             const formData = new FormData();
             formData.append('username', loginId);

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/HomePage.css";
 
-const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
+const API_BASE_URL = "http://43.203.243.68"; // FastAPI 주소
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
