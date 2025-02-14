@@ -17,7 +17,7 @@ const ProductDetails = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
   const [heartCount, setHeartCount] = useState(0);
-
+  const [chatroomCount, setChatroomCount] = useState(0);
 
 const storedUserId = sessionStorage.getItem("user_id");
 const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
@@ -30,7 +30,47 @@ console.log("🎯 현재 로그인된 user_id:", userId);
   //   sessionStorage.setItem("access_token", userData.access_token);
   //   sessionStorage.setItem("user_id", userData.id); // ✅ user_id 저장
   // };
-  
+    const fetchChatrooms = async () => {
+      try {
+          const response = await axios.get("http://localhost:8000/chats", {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`, // 인증 필요시 추가
+              },
+          });
+
+          console.log(response); // 응답 데이터 확인
+
+          // 현재 product.id와 일치하는 채팅방 개수 계산
+          const filteredChatrooms = response.data.chatrooms.filter(
+              (chat) => chat.product_id === product.id
+          );
+
+          console.log("Filtered Chatrooms:", filteredChatrooms); // 필터링된 채팅방 확인
+
+          // 채팅방 개수 설정
+          setChatroomCount(filteredChatrooms.length);
+      } catch (error) {
+          console.error("Failed to fetch chatrooms:", error);
+      }
+    };
+
+
+    fetchChatrooms();
+
+    const handleChatClick = async (productId) => {
+      try {
+          await axios.post("/chats", { product_id: productId }, {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`,
+              },
+          });
+          // 채팅방 추가 후 목록 다시 불러오기
+          fetchChatrooms();
+      } catch (error) {
+          console.error("Failed to create chatroom:", error);
+      }
+  };
+
   useEffect(() => {
     if (!id) return;
 
@@ -374,7 +414,7 @@ const decodeJwt = (token) => {
             <p>{product.content}</p>
           </div>
           <div className="meta-info">
-            <p>채팅 2 · 관심 {heartCount} · 조회 104</p>
+            <p>채팅 {chatroomCount} · 관심 {heartCount} · 조회 104</p>
           </div>
           <div className="button-section">
             <button
@@ -386,7 +426,10 @@ const decodeJwt = (token) => {
             </button>
             <button
               className="cta-btn"
-              onClick={() => goToChatRoom(product.id)}
+              onClick={() => {
+                goToChatRoom(product.id); 
+                handleChatClick(product.id);
+              }}
               disabled={!accessToken}
             >
               채팅하기
