@@ -1,73 +1,53 @@
-# Getting Started with Create React App
+## 메인페이지
+![image](https://github.com/user-attachments/assets/278b4147-db3c-476f-a534-fcd07194f2f9)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 로그인/회원가입
+- 중복 id, email 허용X
 
-## Available Scripts
+![image](https://github.com/user-attachments/assets/8db15528-156c-44e7-860c-63757e68f7ce)
+![image](https://github.com/user-attachments/assets/a104f83f-bbb4-44dd-b064-480337131454)
 
-In the project directory, you can run:
+## 정렬, 검색 기능
+- 카테고리 검색 (전자기기, 가구, 의류, 기타)
+- 가격 높은 순, 낮은순, 최신순, 좋아요 많은 순으로 정렬
+- 검색 바를 통해 제품 검색
 
-### `yarn start`
+![image](https://github.com/user-attachments/assets/06b5391e-99b6-46c1-8f63-ae278f010eb8)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 마이페이지
+- 회원 정보 표시
+- 하트를 눌러서 관심 목록 페이지로 이동
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![image](https://github.com/user-attachments/assets/5384953e-aec8-4be6-8ded-8967bad42ba8)
 
-### `yarn test`
+## 구매 목록, 관심 목록, 판매 목록 조회
+- 판매 목록 자세히보기 버튼으로 상세페이지 이동
+- 판매 게시글 삭제 가능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![image](https://github.com/user-attachments/assets/d8924c1e-2d2f-4460-bb4b-34ce2344ecff)
+![image](https://github.com/user-attachments/assets/8c3e3d5a-99b1-48af-8f8c-46b107990bb1)
+![image](https://github.com/user-attachments/assets/6e637389-1392-4d4f-84fa-478ced0859fd)
 
-### `yarn build`
+## 게시글 작성/수정
+- 우측 하단 + 버튼으로 게시글 작성 페이지로 이동
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![image](https://github.com/user-attachments/assets/7e0fa74e-56f2-4581-a4df-e6de6c5bb57a)
+![image](https://github.com/user-attachments/assets/5c1eed79-90a3-468c-82e7-35f1bfa72362)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 프로필 수정
+![image](https://github.com/user-attachments/assets/6b20dafe-f5ff-4c70-801a-c7cb4992e424)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 회원 탈퇴
+![image](https://github.com/user-attachments/assets/af568ec7-bfd7-44f2-a8c1-8268cdc1c0f5)
 
-### `yarn eject`
+## 제품 상세 페이지
+![image](https://github.com/user-attachments/assets/a387ccc4-ca92-4893-810a-720eeb589d33)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 댓글 기능
+- 댓글 삭제, 수정 가능
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![image](https://github.com/user-attachments/assets/7a26def7-8452-4e27-89b4-d05f907dfb3f)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-### need "npm install jwt-decode"
+## 채팅 기능
+![image](https://github.com/user-attachments/assets/099572e2-12b0-42e2-a851-70990bb7aac3)
+![image](https://github.com/user-attachments/assets/fe5a98c9-64e9-4657-9459-6c8130298664)
