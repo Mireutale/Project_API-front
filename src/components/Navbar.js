@@ -1,25 +1,28 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logoImage from "../assets/logo.png";
-import carrotImage from "../assets/carrot.png";
+import logoImage from "../assets/logo.png"; // 당근 로고 이미지
+import carrotImage from "../assets/carrot.png"; // 프로필 이미지
 import "../css/Navbar.css";
 import { useAuth } from "../AuthContext";
 
+// 네비게이션바 컴포넌트
 const Navbar = () => {
   const { isLoggedIn, user, logout } = useAuth();
   const navigate = useNavigate();
   const profileImage = user?.profile_image || carrotImage;
 
+  // 마이페이지로 이동
   const handleProfileClick = () => {
     navigate("/mypage");
   };
 
+  // 로그아웃 핸들러
   const handleLogout = () => {
     const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
     if (confirmLogout) {
       logout();
       alert("로그아웃 되었습니다.");
-      navigate("/"); // 홈으로 이동
+      navigate("/");
     }
   };
 

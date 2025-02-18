@@ -9,16 +9,16 @@ const CreatePostPage = () => {
   const [content, setContent] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
-  const [categories, setCategories] = useState([]);  // ✅ 카테고리 목록 상태 추가
+  const [categories, setCategories] = useState([]);
   const maxImages = 5;
 
   const navigate = useNavigate();
   const API_URL = "http://43.203.243.68";
   const accessToken = localStorage.getItem("access_token");
 
-  console.log("🛠️ 현재 저장된 토큰:", accessToken);
+  console.log("현재 저장된 토큰:", accessToken);
 
-  // ✅ 카테고리 목록을 FastAPI에서 가져오기
+  // 카테고리 목록 가져오기
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -35,7 +35,7 @@ const CreatePostPage = () => {
     fetchCategories();
   }, []);
 
-  // ✅ 이미지 업로드 핸들러
+  // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     if (files.length + imageFiles.length > maxImages) {
@@ -45,14 +45,14 @@ const CreatePostPage = () => {
     setImageFiles([...imageFiles, ...files]);
   };
 
-  // ✅ 이미지 삭제 핸들러
+  // 이미지 삭제 핸들러
   const handleRemoveImage = (index) => {
     setImageFiles(imageFiles.filter((_, i) => i !== index));
   };
 
   const isFormValid = title && price && content && categoryId;
 
-  // ✅ 게시글 등록 요청
+  // 게시글 등록 요청
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -75,7 +75,7 @@ const CreatePostPage = () => {
       console.log("게시글 등록 성공:", response.data);
       alert("게시글이 등록되었습니다!");
 
-      // ✅ 이미지 업로드
+      // 이미지 업로드
       if (imageFiles.length > 0) {
         const productId = response.data.product.id;
         imageFiles.forEach(async (file) => {
@@ -140,8 +140,6 @@ const CreatePostPage = () => {
           onChange={(e) => setPrice(e.target.value)}
           className="input-field"
         />
-
-        {/* ✅ 동적으로 불러온 카테고리 목록 */}
         <select value={categoryId} onChange={(e) => setCategoryId(parseInt(e.target.value, 10))} className="input-field">
           {categories.length > 0 ? (
             categories.map((category) => (

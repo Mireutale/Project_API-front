@@ -7,15 +7,15 @@ const API_BASE_URL = "http://43.203.243.68"; // FastAPI 주소
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // 🔥 카테고리 목록
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortType, setSortType] = useState("accuracy"); // 기본 정렬: 정확도
-  const [selectedCategory, setSelectedCategory] = useState(""); // 🔥 선택한 카테고리
+  const [sortType, setSortType] = useState("accuracy");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
-    fetchCategories(); // 🔥 카테고리 목록 불러오기
+    fetchCategories();
   }, [sortType, selectedCategory]); // 정렬 또는 카테고리 변경 시 API 호출
 
   const fetchProducts = async (query = "") => {
@@ -34,7 +34,7 @@ const HomePage = () => {
       }));
       setProducts(fetchedProducts);
     } catch (error) {
-      console.error("❌ 상품 목록을 불러오지 못했습니다.", error);
+      console.error("상품 목록을 불러오지 못했습니다.", error);
     }
   };
 
@@ -43,7 +43,7 @@ const HomePage = () => {
       const response = await axios.get(`${API_BASE_URL}/categories`);
       setCategories(response.data);
     } catch (error) {
-      console.error("❌ 카테고리를 불러오지 못했습니다.", error);
+      console.error("카테고리를 불러오지 못했습니다.", error);
     }
   };
 
@@ -72,7 +72,7 @@ const HomePage = () => {
     <div className="homepage">
       <h1 className="title">중고거래 인기매물</h1>
 
-      {/* 🔍 검색 필드 */}
+      {/* 검색 필드 */}
       <form className="home-search-bar" onSubmit={handleSearchSubmit}>
         <input
           type="text"
@@ -84,10 +84,10 @@ const HomePage = () => {
         <button type="submit" className="home-search-button">검색</button>
       </form>
 
-      {/* 🔥 카테고리 & 정렬 컨테이너 (한 줄 배치) */}
+      {/* 카테고리 & 정렬 컨테이너 (한 줄 배치) */}
       <div className="filter-container">
         <div className="category-sort-wrapper">
-          {/* 🔥 카테고리 선택 */}
+          {/* 카테고리 선택 */}
           <div className="category-container">
             <label htmlFor="category">카테고리: </label>
             <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
@@ -100,7 +100,7 @@ const HomePage = () => {
             </select>
           </div>
 
-          {/* 🔽 정렬 선택 */}
+          {/* 정렬 선택 */}
           <div className="sort-container">
             <label htmlFor="sort">정렬: </label>
             <select id="sort" value={sortType} onChange={handleSortChange}>
@@ -114,7 +114,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 📜 상품 목록 */}
+      {/* 상품 목록 */}
       <div className="product-list">
         {products.map((product) => (
           <div 
@@ -130,8 +130,6 @@ const HomePage = () => {
           </div>
         ))}
       </div>
-
-      {/* ✅ 오른쪽 하단에 동그란 + 버튼 추가 */}
       <button className="floating-add-button" onClick={handleCreatePost}>
         +
       </button>

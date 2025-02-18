@@ -20,15 +20,9 @@ const ProductDetails = () => {
   const [chatroomCount, setChatroomCount] = useState(0);
   const storedUserId = sessionStorage.getItem("user_id");
   const userId = storedUserId ? Number(storedUserId) : null; // parseInt 대신 Number 사용
-  console.log("🎯 현재 로그인된 user_id:", userId);
+  console.log("현재 로그인된 user_id:", userId);
   const accessToken = sessionStorage.getItem("access_token");
   const [views, setViews] = useState(0);
-  // // ✅ 로그인 성공 시 사용자 정보 저장
-  // const handleLoginSuccess = (userData) => {
-  //   console.log("✅ 로그인 성공: ", userData); // 로그 추가
-  //   sessionStorage.setItem("access_token", userData.access_token);
-  //   sessionStorage.setItem("user_id", userData.id); // ✅ user_id 저장
-  // };
   const fetchViewCount = async ({ productId }) => {
     try {
       const response = await axios.post(
@@ -118,9 +112,9 @@ const ProductDetails = () => {
   }, [product, hasFetchedViews]);
 
 
-  // ✅ 좋아요 상태 가져오기 (로그인된 경우만 요청)
+  // 좋아요 상태 가져오기 (로그인된 경우만 요청)
   useEffect(() => {
-    if (!id || !userId) return; // ✅ userId가 없으면 요청하지 않음
+    if (!id || !userId) return; // userId가 없으면 요청하지 않음
 
     const fetchLikeStatus = async () => {
       try {
@@ -133,7 +127,7 @@ const ProductDetails = () => {
         setLiked(likeResponse.data.liked);
         setHeartCount(likeResponse.data.count);
       } catch (error) {
-        console.error("❌ 좋아요 상태를 가져오지 못했습니다.", error);
+        console.error("좋아요 상태를 가져오지 못했습니다.", error);
       }
     };
 
@@ -141,7 +135,7 @@ const ProductDetails = () => {
     getHeartCount();
   }, [id, userId]);
 
-  // ✅ 이미지 이전/다음 버튼 기능 추가
+  // 이미지 이전/다음 버튼 기능 추가
   const prevImage = () => {
     setCurrentImageIndex((prev) =>
       prev === 0 ? product.images.length - 1 : prev - 1
@@ -154,7 +148,7 @@ const ProductDetails = () => {
     );
   };
 
-  // ✅ 댓글 가져오기
+  // 댓글 가져오기
   useEffect(() => {
     if (!id) return;
 
@@ -165,14 +159,14 @@ const ProductDetails = () => {
         });
         setComments(response.data.comments);
       } catch (error) {
-        console.error("❌ 댓글을 가져오지 못했습니다.", error);
+        console.error("댓글을 가져오지 못했습니다.", error);
       }
       };
 
     fetchComments();
   }, [id]);
 
-  // ✅ 댓글 추가 (로그인 필수)
+  // 댓글 추가 (로그인 필수)
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!accessToken) {
@@ -196,11 +190,11 @@ const ProductDetails = () => {
       setComments(response.data.comments);
       setCommentText("");
     } catch (error) {
-      console.error("❌ 댓글을 추가하지 못했습니다.", error);
+      console.error("댓글을 추가하지 못했습니다.", error);
     }
   };
 
-  // ✅ 댓글 수정
+  // 댓글 수정
   const handleEditComment = (comment) => {
     setEditingCommentId(comment.id);
     setEditText(comment.content);
@@ -208,40 +202,40 @@ const ProductDetails = () => {
 
   const handleUpdateComment = async (commentId) => {
     if (!accessToken) {
-      console.warn("⚠️ 저장 불가: accessToken 없음");
+      console.warn("저장 불가: accessToken 없음");
       return;
     }
 
-    console.log(`✅ 댓글 수정 요청: ID ${commentId}, 내용: ${editText}`);
+    console.log(`댓글 수정 요청: ID ${commentId}, 내용: ${editText}`);
 
     try {
       const response = await axios.put(
         `${API_BASE_URL}/comments/${commentId}`,
-        { content: editText }, // ✅ JSON body로 `content` 전달
+        { content: editText }, // JSON body로 `content` 전달
         {
           headers: {
-            "Content-Type": "application/json", // ✅ JSON 형식으로 전달
+            "Content-Type": "application/json", // JSON 형식으로 전달
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
 
-      console.log("🎯 댓글 수정 성공", response.data);
+      console.log("댓글 수정 성공", response.data);
 
-      // ✅ 수정 후 댓글 목록 다시 불러오기
+      // 수정 후 댓글 목록 다시 불러오기
       const updatedComments = await axios.get(`${API_BASE_URL}/comments`, {
         params: { product_id: id },
       });
       setComments(updatedComments.data.comments);
-      setEditingCommentId(null); // ✅ 수정 상태 초기화
+      setEditingCommentId(null); // 수정 상태 초기화
     } catch (error) {
       console.error(
-        "❌ 댓글을 수정하지 못했습니다.",
+        "댓글을 수정하지 못했습니다.",
         error.response ? error.response.data : error
       );
     }
   };
-  // ✅ 댓글 삭제
+  // 댓글 삭제
   const handleDeleteComment = async (commentId) => {
     if (!accessToken) return;
 
@@ -252,7 +246,7 @@ const ProductDetails = () => {
 
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
-      console.error("❌ 댓글을 삭제하지 못했습니다.", error);
+      console.error("댓글을 삭제하지 못했습니다.", error);
     }
   };
   const getHeartCount = async () => {
@@ -264,31 +258,31 @@ const ProductDetails = () => {
     }
   };
   const handleLikeToggle = async () => {
-    console.log("🎯 좋아요 토글");
+    console.log("좋아요 토글");
     if (!accessToken) {
       alert("로그인이 필요합니다.");
       return;
     }
-    if (!product?.id || !userId) return; // ✅ userId가 없을 경우 요청 차단
+    if (!product?.id || !userId) return; // userId가 없을 경우 요청 차단
 
     try {
       if (liked) {
-        // ✅ 좋아요 취소 (DELETE 요청을 JSON Body로 전송)
+        // 좋아요 취소 (DELETE 요청을 JSON Body로 전송)
         await axios.delete(`${API_BASE_URL}/products/${product.id}/likes`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-          data: { user_id: userId }, // ✅ DELETE 요청의 body에 user_id 포함
+          data: { user_id: userId }, // DELETE 요청의 body에 user_id 포함
         });
 
-        console.log("🎯 좋아요 취소 성공");
+        console.log("좋아요 취소 성공");
         setLiked(false);
       } else {
-        // ✅ 좋아요 추가 (POST 요청)
+        // 좋아요 추가 (POST 요청)
         await axios.post(
           `${API_BASE_URL}/products/${product.id}/likes`,
-          { user_id: userId }, // ✅ JSON Body로 user_id 전달
+          { user_id: userId }, // JSON Body로 user_id 전달
           {
             headers: {
               "Content-Type": "application/json",
@@ -297,11 +291,11 @@ const ProductDetails = () => {
           }
         );
 
-        console.log("🎯 좋아요 추가 성공");
+        console.log("좋아요 추가 성공");
         setLiked(true);
       }
     } catch (error) {
-      console.error("❌ 좋아요 변경 실패", error);
+      console.error("좋아요 변경 실패", error);
     }
     getHeartCount();
   };
@@ -355,7 +349,7 @@ const decodeJwt = (token) => {
   return decoded;
 };
   
-  // ✅ **구매하기** 기능 추가
+  // **구매하기** 기능 추가
   const handlePurchase = async () => {
     if (!accessToken) {
       alert("로그인이 필요합니다.");
@@ -363,7 +357,7 @@ const decodeJwt = (token) => {
     }
 
     try {
-      // **✅ 구매 API 호출 (실제 API 엔드포인트에 맞게 수정)**
+      // **구매 API 호출 (실제 API 엔드포인트에 맞게 수정)**
       const response = await axios.post(
         `${API_BASE_URL}/products/${id}/purchase`, // 예시 URL
         {}, // 필요한 경우 request body 추가
@@ -374,20 +368,20 @@ const decodeJwt = (token) => {
         }
       );
 
-      // **✅ 구매 성공 알림 또는 처리**
+      // **구매 성공 알림 또는 처리**
       alert("상품 구매 대기가 완료되었습니다.");
-      console.log("✅ 상품 구매 대기 성공:", response.data);
+      console.log("상품 구매 대기 성공:", response.data);
 
-      // **✅ 구매 후 처리 (예: 페이지 리디렉션, 상태 업데이트 등)**
+      // **구매 후 처리 (예: 페이지 리디렉션, 상태 업데이트 등)**
       // 예시: 구매 완료 페이지로 이동
       // navigate('/purchase-complete');
     } catch (error) {
-      console.error("❌ 상품 구매 대기 중 오류 발생:", error);
+      console.error("상품 구매 대기 중 오류 발생:", error);
       alert("상품 구매 대기에 실패했습니다.");
     }
   };
 
-  // ✅ 카테고리 옵션 목록
+  // 카테고리 옵션 목록
   const categories = [
     { id: 1, name: "전자기기" },
     { id: 2, name: "의류" },
@@ -457,7 +451,7 @@ const decodeJwt = (token) => {
             >
               채팅하기
             </button>
-            {/* **✅ 구매하기 버튼 추가** */}
+            {/* **구매하기 버튼** */}
             <button
               className="purchase-btn"
               onClick={handlePurchase}
@@ -469,11 +463,11 @@ const decodeJwt = (token) => {
         </section>
       </div>
 
-      {/* ✅ 댓글 섹션 */}
+      {/* 댓글 섹션 */}
       <div className="comment-section">
         <h2>댓글</h2>
 
-        {/* ✅ 댓글 작성 폼 */}
+        {/* 댓글 작성 폼 */}
         <form id="comment-form" onSubmit={handleCommentSubmit}>
           <input
             type="text"
@@ -493,7 +487,6 @@ const decodeJwt = (token) => {
   {comments.length > 0 ? (
     comments.map((comment) => (
       <li key={comment.id} className="comment-item">
-        {/* ✅ 유저 ID & 날짜 */}
         <div className="comment-header">
           <div className="comment-meta">
             <span className="comment-user">User ID: {comment.user_id}</span>
@@ -509,8 +502,6 @@ const decodeJwt = (token) => {
             </span>
           </div>
         </div>
-
-        {/* ✅ 항상 input과 버튼이 같은 줄에 위치 */}
         <div className="comment-edit-container">
           {editingCommentId === comment.id ? (
             <input
@@ -522,8 +513,6 @@ const decodeJwt = (token) => {
           ) : (
             <p className="comment-content">{comment.content}</p>
           )}
-
-          {/* ✅ 수정 & 삭제 버튼 (input 필드 오른쪽) */}
           {userId && comment.user_id === userId && (
             <div className="comment-buttons">
               {editingCommentId === comment.id ? (

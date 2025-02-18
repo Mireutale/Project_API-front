@@ -34,7 +34,7 @@ const SignUp = () => {
             login(response.data); // 서버에서 받은 사용자 정보를 Context에 저장
 
             // 토큰 저장 및 홈페이지로 이동
-            localStorage.setItem('access_token', response.data.access_token); // ✅ 일관성 있게 'access_token' 사용
+            localStorage.setItem('access_token', response.data.access_token);
             alert('회원가입이 완료되었습니다!'); // 회원가입 완료 알림
             navigate('/'); // 홈 페이지로 이동
         } catch (error) {

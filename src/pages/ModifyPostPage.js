@@ -11,16 +11,16 @@ const ModifyPostPage = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageIDs, setImageIDs] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
-  const [categories, setCategories] = useState([]); // ✅ 카테고리 목록 상태 추가
+  const [categories, setCategories] = useState([]);
   const maxImages = 5;
 
   const navigate = useNavigate();
   const API_URL = "http://43.203.243.68";
   const accessToken = localStorage.getItem("access_token");
 
-  console.log("🛠️ 현재 저장된 토큰:", accessToken);
+  console.log("현재 저장된 토큰:", accessToken);
 
-  // ✅ 카테고리 목록을 FastAPI에서 가져오기
+  // 카테고리 목록을 FastAPI에서 가져오기
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -34,7 +34,7 @@ const ModifyPostPage = () => {
     fetchCategories();
   }, []);
 
-  // ✅ 기존 상품 데이터 불러오기
+  // 기존 상품 데이터 불러오기
   const fetchProduct = async () => {
     try {
       const response = await axios.get(`${API_URL}/products/${product_id}`);
@@ -75,7 +75,7 @@ const ModifyPostPage = () => {
     fetchProduct();
   }, [product_id]);
 
-  // ✅ 이미지 업로드 핸들러
+  // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     if (files.length + imageFiles.length > maxImages) {
@@ -90,7 +90,7 @@ const ModifyPostPage = () => {
     });
   };
 
-  // ✅ 이미지 삭제 핸들러
+  // 이미지 삭제 핸들러
   const handleRemoveImage = async (index) => {
     const image_id = imageIDs[index];
     await deleteImage(image_id);
@@ -130,7 +130,7 @@ const ModifyPostPage = () => {
 
   const isFormValid = title && price && content && categoryId;
 
-  // ✅ 상품 수정 요청
+  // 상품 수정 요청
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -203,7 +203,7 @@ const ModifyPostPage = () => {
           className="input-field"
         />
 
-        {/* ✅ 동적으로 불러온 카테고리 목록 */}
+        {/* 동적으로 불러온 카테고리 목록 */}
         <select value={categoryId} onChange={(e) => setCategoryId(parseInt(e.target.value, 10))} className="input-field">
           {categories.length > 0 ? (
             categories.map((category) => (
