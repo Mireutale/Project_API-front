@@ -14,7 +14,7 @@ const ChatList = ({ userId, onSelectChatroom }) => {
       return;
     }
 
-    fetch("http://43.203.243.68/chats", {
+    fetch("http://localhost:8000/chats", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: "application/json",
