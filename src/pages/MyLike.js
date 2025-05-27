@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "../css/MyLike.css";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "http://54.206.84.11";
 
 const MyLike = () => {
     const [likedProducts, setLikedProducts] = useState([]);

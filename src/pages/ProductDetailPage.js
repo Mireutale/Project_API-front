@@ -4,7 +4,7 @@ import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../css/ProductDetailPage.css";
 
-const API_BASE_URL = "http://localhost:8000"; // FastAPI 주소
+const API_BASE_URL = "http://54.206.84.11:8000"; // FastAPI 주소
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const ProductDetails = () => {
   const fetchViewCount = async ({ productId }) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/products/${productId}/view`,
+        `http://54.206.84.11/products/${productId}/view`,
         null, // 요청 본문 없음
         {
           headers: {
@@ -42,7 +42,7 @@ const ProductDetails = () => {
 
   const fetchChatrooms = async () => {
     try {
-        const response = await axios.get("http://localhost:8000/chats", {
+        const response = await axios.get("http://54.206.84.11/chats", {
             headers: {
                 Authorization: `Bearer ${accessToken}`, // 인증 필요시 추가
             },
