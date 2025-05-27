@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/MySelling.css";
 
-const API_BASE_URL = "http://54.206.84.11";
+const API_BASE_URL = "/api";
 
 const MySelling = () => {
     const [products, setProducts] = useState([]);

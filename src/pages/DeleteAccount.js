@@ -16,7 +16,7 @@ const DeleteAccount = () => {
                     throw new Error('인증 토큰이 없습니다.');
                 }
 
-                await axios.delete('http://54.206.84.11/users/profile', {
+                await axios.delete('/api/users/profile', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 logout(); // 로그아웃 처리

@@ -17,7 +17,7 @@ const Login = () => {
         setError('');
         
         try {
-            const API_ENDPOINT = 'http://54.206.84.11/users/token';
+            const API_ENDPOINT = '/api/users/token';
         
             const formData = new FormData();
             formData.append('username', loginId);

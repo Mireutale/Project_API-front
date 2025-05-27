@@ -24,7 +24,7 @@ const ProfileEdit = () => {
 
         try {
             const response = await axios.put(
-                'http://54.206.84.11/users/profile',
+                '/api/users/profile',
                 {
                     login_id: loginId,
                     username,

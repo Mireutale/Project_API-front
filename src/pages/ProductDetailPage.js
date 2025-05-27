@@ -4,7 +4,7 @@ import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../css/ProductDetailPage.css";
 
-const API_BASE_URL = "http://54.206.84.11:8000"; // FastAPI 주소
+const API_BASE_URL = "/api"; // FastAPI 주소
 
 const ProductDetails = () => {
   const navigate = useNavigate();
